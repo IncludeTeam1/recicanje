@@ -1,0 +1,12 @@
+---
+const props = Astro.props;
+console.log(props);
+---
+
+<input
+  class=`p-2 outline-none rounded-lg text-black  ${props.class}`
+  type={props.type}
+  placeholder={props.placeholder}
+  id={props.id}
+  name={props.name}
+/>
