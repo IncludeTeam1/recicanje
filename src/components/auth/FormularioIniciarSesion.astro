@@ -1,0 +1,183 @@
+---
+import Input from "../Input.astro";
+import Close from "../icons/Close.astro";
+import BotontesAuth from "./BotontesAuth.astro";
+import { accionesAuth, idsBtnAuth } from "./constants/idsBtnAuth";
+---
+
+<div>
+  <!-- Abrir el modal -->
+
+  <div>
+    <button id="btnAbrirModal" class="p-2 bg-sky-500 rounded-lg"
+      >Iniciar Sesión</button
+    >
+  </div>
+
+  <div
+    transition:animate="fade"
+    id="modalFormulario"
+    class="absolute z-50 top-0 bottom-0 w-full left-0
+    flex items-center justify-center
+    bg-black bg-opacity-70 opacity-0 pointer-events-none transition-all"
+  >
+    <!-- Formulario modal -->
+    <form
+      id="formularioIniciarSesion"
+      class="flex gap-5 items-end flex-wrap bg-green-950
+      p-10 flex-col shadow-2xl rounded-2xl
+      w-[90%]
+      max-w-[500px]
+    relative overflow-hidden"
+    >
+      <span id="cerrarModal" class="cursor-pointer">
+        <Close
+          className="stroke-white hover:scale-95 transition hover:shadow-lg"
+        />
+      </span>
+      <h2 class="text-2xl md:text-5xl font-bold text-center mx-auto">
+        Iniciar sesión
+      </h2>
+      <!-- EMAIL -->
+      <label for="email" class="flex flex-col w-full">
+        <span>Correo electronico</span>
+        <Input
+          name="correo"
+          class="p-2 outline-none rounded-lg text-black"
+          type="email"
+          placeholder="ejemplo@gmail.com"
+        />
+        <span
+          id="errorCorreo"
+          class="text-rose-400 font-bold text-right hidden errorInput"
+          >Correo invalido</span
+        >
+      </label>
+      <!-- CONTRASEÑA -->
+      <label for="contraseña" class="flex flex-col w-full">
+        <span>Contraseña:</span>
+        <Input
+          id="contraseña"
+          name="contraseña"
+          type="password"
+          placeholder="******"
+        />
+        <span
+          id="errorContra"
+          class="text-rose-400 font-bold text-right hidden errorInput"
+          >La contraseña debe tener al menos 6 caracteres</span
+        >
+      </label>
+      <div class="flex flex-col gap-5 w-full justify-between">
+        <button
+          id="btnIniciar"
+          type="submit"
+          class="bg-sky-700 shadow-lg font-bold w-full rounded-lg p-3"
+          >Ingresar</button
+        >
+        <BotontesAuth
+          action={accionesAuth.inicio}
+          idBtnGoogle={idsBtnAuth.idBtnGoogleInicio}
+          idBtnFacebook={idsBtnAuth.idBtnFacebookInicio}
+          urlFetch="/api/auth/iniciarSesion"
+        />
+        <span
+          class="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-r from-green-300 via-blue-500 to-purple-600"
+        ></span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+  import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+  import { app } from "../../firebase/client";
+  import { obtenerMensajeDeError } from "../../constants/firebase/errores";
+
+  const auth = getAuth(app);
+
+  /* <--------Manipulación del modal------> */
+  const btnAbrirModal = document.querySelector("#btnAbrirModal");
+  const modal = document.querySelector("#modalFormulario");
+  const btnCerrarModal = document.querySelector("#cerrarModal");
+  btnAbrirModal.addEventListener("click", (e) => {
+    modal.classList.remove("opacity-0");
+    modal.classList.remove("pointer-events-none");
+    document.body.style.overflow = "hidden";
+  });
+
+  btnCerrarModal.addEventListener("click", () => {
+    modal.classList.add("opacity-0");
+    modal.classList.add("pointer-events-none");
+    document.body.style.overflow = "unset";
+  });
+
+  /* <--------Manejo del inicio de sesión------> */
+  const form = document.querySelector(
+    "#formularioIniciarSesion"
+  ) as HTMLFormElement;
+  const btnIniciar = document.querySelector("#btnIniciar");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    btnIniciar.textContent = "cargando...";
+    btnIniciar.classList.add("opacity-50");
+    btnIniciar.setAttribute("disabled", "true");
+
+    const infoFormulario = new FormData(form);
+    const contraseña = infoFormulario.get("contraseña").toString();
+    const correo = infoFormulario.get("correo").toString();
+    /* Validación */
+    if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(correo)) {
+      document.querySelector("#errorCorreo").classList.remove("hidden");
+      return;
+    }
+    if (contraseña.length < 5) {
+      document.querySelector("#errorContra").classList.remove("hidden");
+      return;
+    }
+
+    iniciarSesion(correo, contraseña);
+
+    form.reset();
+  });
+
+  /* <----------Valida al usuario y envia que crea la cookie de la sesión-----< */
+  async function iniciarSesion(correo: string, contra: string) {
+    try {
+      /* Autentica al usuario */
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        correo,
+        contra
+      );
+      const idToken = await userCredential.user.getIdToken();
+      /* Petición para guardar al usuario en sesión */
+      const response = await fetch("/api/auth/iniciarSesion", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+
+      if (response.redirected) {
+        window.location.assign(response.url);
+      }
+    } catch (error) {
+      const mensaje = obtenerMensajeDeError(error.code);
+      alert(mensaje);
+    }
+    btnIniciar.textContent = "ingresar";
+    btnIniciar.classList.remove("opacity-50");
+    btnIniciar.removeAttribute("disabled");
+  }
+
+  /* Reinicia los errores */
+  form.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("input", (e) => {
+      document
+        .querySelectorAll(".errorInput")
+        .forEach((error) => error.classList.add("hidden"));
+    });
+  });
+</script>

@@ -2,6 +2,31 @@
 import Layout from "../layouts/Layout.astro";
 import imgHero from "../assets/images/reciclage.svg";
 import Input from "../components/Input.astro";
+
+/* Verifica si ya esta en sesión */
+import { app } from "../firebase/server";
+import { getAuth } from "firebase-admin/auth";
+import FormularioIniciarSesion from "../components/auth/FormularioIniciarSesion.astro";
+import Google from "../components/icons/Google.astro";
+import Facebook from "../components/icons/Facebook.astro";
+import BotontesAuth from "../components/auth/BotontesAuth.astro";
+import { accionesAuth } from "../components/auth/constants/idsBtnAuth";
+const auth = getAuth(app);
+
+if (Astro.cookies.has("session")) {
+  const sessionCookie = Astro.cookies.get("session").value;
+  const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+  if (decodedCookie) {
+    return Astro.redirect("/");
+  }
+}
+
+const idsBtnAuth = {
+  idBtnGoogleRegistro: "btnGoogleRegistro",
+  idBtnGoogleInicio: "btnGoogleInicio",
+  idBtnFacebookRegistro: "btnFacebookResgistro",
+  idBtnFacebookInicio: "btnFacebookInicio",
+};
 ---
 
 <Layout title="Inciar sesión">
@@ -10,145 +35,232 @@ import Input from "../components/Input.astro";
   min-h-screen w-full text-emerald-100 flex flex-col"
   >
     <!-- HEADER CON LOGIN -->
-    <header class="min-h-[100px] p-2 shadow-xl px-5">
+    <header class="min-h-[100px] flex items-center p-2 shadow-xl px-5">
       <!-- Logo RECICANJE -->
       <div
-        class="w-[90%] max-w-[1280px] h-full flex flex-col lg:flex-row justify-between items-center mx-auto"
+        class="w-[90%] max-w-[1280px] flex flex-col gap-3 lg:flex-row justify-between items-center mx-auto"
       >
         <h1 class="text-5xl font-bold">RECICANJE</h1>
-        <form action="" class="flex gap-5 items-end flex-wrap">
-          <!-- EMAIL -->
-          <label for="email" class="flex flex-col">
-            <span>Correo electronico</span>
-            <Input
-              class="p-2 outline-none rounded-lg text-black"
-              type="email"
-              placeholder="ejemplo@gmail.com"
-            />
-          </label>
-          <!-- CONTRASEÑA -->
-          <label for="contraseña" class="flex flex-col">
-            <span>Contraseña:</span>
-            <Input
-              id="contraseña"
-              name="contraseña"
-              type="password"
-              placeholder="******"
-            />
-          </label>
-          <button class="bg-sky-700 rounded-lg p-3">Ingresar</button>
-        </form>
+        <FormularioIniciarSesion />
       </div>
     </header>
 
     <main
-      class="w-[90%] max-w-[1280px] mx-auto flex-grow flex items-start pt-[100px]"
+      class="w-[90%] max-w-[1280px] mx-auto flex-grow items-center justify-center flex"
     >
-      <img
-        src={imgHero.src}
-        class="absolute md:static
-       w-[90%] md:w-[50%] max-h-[500px]"
-      />
+      <div class="w-full flex">
+        <img
+          src={imgHero.src}
+          class="absolute md:static
+     w-[90%] md:w-[50%] max-h-[500px]"
+        />
 
-      <!-- SECCION PARA CREAR CUENTA -->
-      <div class="backdrop-blur-md w-full md:w-[50%]">
-        <h2 class="text-5xl font-bold">Crea una Cuenta</h2>
-        <form id="formRegister" class="flex flex-col gap-1 p-5">
-          <!-- Nombre -->
-          <label for="nombreRegister">Nombre:</label>
-          <Input
-            type="text"
-            name="nombreRegister"
-            id="nombreRegister"
-            placeholder="Agustin Alberto"
-          />
-          <span
-            id="errorNombreRegister"
-            class="text-rose-400 font-bold text-right hidden"
-            >Por favor, ingrese un nombre válido.</span
-          >
-          <!-- Apellido -->
-          <label for="apellidoRegister">Apellido:</label>
-          <Input
-            type="text"
-            name="apellido"
-            id="apellido"
-            placeholder="Agustin Milei Messi"
-          />
-          <!-- Correo electronico -->
-          <label for="correoRegister">Correo Electronico:</label>
-          <Input
-            type="email"
-            name="correoRegister"
-            id="correoRegister"
-            placeholder="ejemplo@gmail.com"
-          />
-          <!-- Contraseña -->
-          <label for="correoRegister">Contraseña:</label>
-          <Input
-            type="password"
-            name="contraseñaRegister"
-            id="contraseñaRegister"
-            placeholder="******"
-          />
-          <!-- Confirmar Contraseña -->
-          <label for="correoRegister">Confirmar contraseña:</label>
-          <Input
-            type="password"
-            name="confirmarContra"
-            id="confirmarContra"
-            placeholder="******"
-          />
+        <!-- SECCION PARA CREAR CUENTA -->
+        <div
+          class="backdrop-blur-md w-full md:w-[50%] shadow-2xl rounded-xl p-3"
+        >
+          <h2 class="text-5xl font-bold">Crea una Cuenta</h2>
+          <form id="formRegister" class="flex flex-col gap-1 p-5 pb-2 h-auto">
+            <!-- Nombre -->
+            <label for="nombreRegister">Nombre/s:</label>
+            <Input
+              type="text"
+              name="nombreRegister"
+              id="nombreRegister"
+              placeholder="Agustin Alberto"
+            />
+            <span
+              id="errorNombreRegister"
+              class="text-rose-400 font-bold text-right hidden errorInput"
+              >Por favor, ingrese un nombre válido.</span
+            >
+            <!-- Apellido -->
+            <label for="apellidoRegister">Apellido/s:</label>
+            <Input
+              type="text"
+              name="apellido"
+              id="apellidoRegister"
+              placeholder="Gonzalez Messi"
+            />
+            <span
+              id="errorApellidoRegister"
+              class="text-rose-400 font-bold text-right hidden errorInput"
+              >Por favor, ingrese un apellido válido.</span
+            >
 
-          <button type="submit" class="bg-emerald-400 p-2
-          rounded-md"
-            >Registarse</button
-          >
-        </form>
+            <!-- Correo electronico -->
+            <label for="correoRegister">Correo Electronico:</label>
+            <Input
+              type="email"
+              name="correoRegister"
+              id="correoRegister"
+              placeholder="ejemplo@gmail.com"
+            />
+            <span
+              id="errorCorreoRegister"
+              class="text-rose-400 font-bold text-right hidden errorInput"
+              >Por favor, ingrese un correo válido.</span
+            >
+            <!-- Contraseña -->
+            <label for="contraseñaRegister">Contraseña:</label>
+            <Input
+              type="password"
+              name="contraseñaRegister"
+              id="contraseñaRegister"
+              placeholder="******"
+            />
+            <span
+              id="errorContraRegister"
+              class="text-rose-400 font-bold text-right hidden errorInput"
+              >Minimo 6 caracteres</span
+            >
+
+            <!-- Confirmar Contraseña -->
+            <label for="confirmarContra">Confirmar contraseña:</label>
+            <Input
+              type="password"
+              name="confirmarContra"
+              id="confirmarContra"
+              placeholder="******"
+            />
+            <span
+              id="errorConfirmRegister"
+              class="text-rose-400 font-bold text-right hidden errorInput"
+              >Las contraseñas no coinciden.</span
+            >
+            <button
+              type="submit"
+              id="btnRegister"
+              class="bg-emerald-400 p-2
+        rounded-md">Registarse</button
+            >
+          </form>
+          <!-- Auth -->
+          <BotontesAuth
+            action={accionesAuth.registro}
+            idBtnGoogle={idsBtnAuth.idBtnGoogleRegistro}
+            idBtnFacebook={idsBtnAuth.idBtnFacebookRegistro}
+            urlFetch="/api/auth/registrarUsuario"
+          />
+        </div>
       </div>
     </main>
   </div>
 </Layout>
 
 <script>
-  const formRegister = document.querySelector("#formRegister");
+  import {
+    getAuth,
+    inMemoryPersistence,
+    createUserWithEmailAndPassword,
+    updateProfile,
+  } from "firebase/auth";
+  import { app } from "../firebase/client";
+  import { obtenerMensajeDeError } from "../constants/firebase/errores";
 
-  formRegister.addEventListener("submit", function (event) {
+  const auth = getAuth(app);
+  // Esto evitará que el navegador almacene los datos de sesión
+  auth.setPersistence(inMemoryPersistence);
+  /* <-----------------------------inicio de sesión con email y contraseña-----------------> */
+  const formRegister = document.querySelector(
+    "#formRegister"
+  ) as HTMLFormElement;
+  const btnRegister = document.querySelector("#btnRegister");
+
+  /* Registrarse con email y password */
+  formRegister.addEventListener("submit", async function (event) {
     event.preventDefault(); // Evita que el formulario se envíe por defecto
 
     const formData = new FormData(formRegister);
 
-    const nombre = formData.get("nombreRegister");
-    const apellido = formData.get("apellido");
-    const correo = formData.get("correoRegister");
-    const contraseña = formData.get("contraseñaRegister");
-    const confirmarContra = formData.get("confirmarContra");
+    /* Almacena el valor ingresado */
+    const nombre = formData.get("nombreRegister").toString();
+    const apellido = formData.get("apellido").toString();
+    const correo = formData.get("correoRegister").toString();
+    const contraseña = formData.get("contraseñaRegister").toString();
+    const confirmarContra = formData.get("confirmarContra").toString();
 
-    if (!nombre.trim()) {
+    if (!nombre.trim() || nombre.length < 4) {
       document.querySelector("#errorNombreRegister").classList.remove("hidden");
-      // alert("Por favor, ingrese un nombre válido.");
       return;
     }
-
+    if (!apellido.trim() || apellido.length < 4) {
+      document
+        .querySelector("#errorApellidoRegister")
+        .classList.remove("hidden");
+      return;
+    }
     if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(correo)) {
-      alert("Por favor, ingrese un correo electrónico válido.");
+      document.querySelector("#errorCorreoRegister").classList.remove("hidden");
       return;
     }
-
     if (contraseña.length < 5) {
-      alert("Contraseña invalida, debe tener más de 4 caracteres");
-    }
-
-    if (contraseña !== confirmarContra) {
-      alert("Las contraseñas no coinciden.");
+      document.querySelector("#errorContraRegister").classList.remove("hidden");
       return;
     }
+    if (contraseña !== confirmarContra) {
+      document
+        .querySelector("#errorConfirmRegister")
+        .classList.remove("hidden");
+      return;
+    }
+    btnRegister.textContent = "Cargando...";
+    btnRegister.classList.add("opacity-50");
+    btnRegister.setAttribute("disabled", "true");
 
-    console.log("Nombre:", nombre);
-    console.log("Apellido:", apellido);
-    console.log("Correo Electrónico:", correo);
-    console.log("Contraseña:", contraseña);
-    alert(`Usuario ${nombre} ha creado una cuenta 😎`);
+    createUser(nombre, apellido, correo, contraseña);
+
     formRegister.reset();
+  });
+
+  /* Crea usuario en firebase y envia la petición para que se guarde en sesión. */
+  async function createUser(
+    nombre: string,
+    apellido: string,
+    correo: string,
+    contraseña: string
+  ) {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        correo,
+        contraseña
+      );
+
+      const user = {
+        ...userCredential.user,
+        nombre,
+        apellido,
+      };
+
+      await updateProfile(userCredential.user, {
+        displayName: `${nombre} ${apellido}`,
+      });
+      const idToken = await userCredential.user.getIdToken();
+      const response = await fetch("/api/auth/registrarUsuario", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify(user),
+      });
+
+      if (response.status === 200) {
+        window.location.assign("/");
+      }
+    } catch (e) {
+      alert(obtenerMensajeDeError(e.code));
+    }
+    btnRegister.textContent = "Registrarse";
+    btnRegister.removeAttribute("disabled");
+    btnRegister.classList.remove("opacity-50");
+  }
+  /* Reinicia los errores */
+  formRegister.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("input", (e) => {
+      document
+        .querySelectorAll(".errorInput")
+        .forEach((error) => error.classList.add("hidden"));
+    });
   });
 </script>

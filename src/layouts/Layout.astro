@@ -4,6 +4,7 @@ interface Props {
 }
 
 const { title } = Astro.props;
+import { ViewTransitions } from "astro:transitions";
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
@@ -15,25 +16,32 @@ const { title } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <ViewTransitions />
   </head>
-  <body>
+  <body
+    class="bg-gradient-to-b from-emerald-900 via-emerald-950 to-emerald-700
+  min-h-screen w-full text-emerald-100 flex flex-col"
+  >
     <slot />
+    <script></script>
+
+    <!-- CSS -->
+    <style is:global>
+      body {
+        overflow-x: hidden;
+      }
+
+      input,
+      input:focus {
+        outline: none;
+      }
+
+      button {
+        transition: 0.2s;
+      }
+      button:hover {
+        transform: scale(0.96);
+      }
+    </style>
   </body>
 </html>
-
-<!-- CSS -->
-<style is:global>
-  body {
-    overflow-x: hidden;
-  }
-
-  input,
-  input:focus {
-    outline: none;
-  }
-</style>
-
-<!-- JS navegador -->
-<script>
-  console.log("Hellow");
-</script>
