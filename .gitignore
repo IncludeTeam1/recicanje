@@ -19,3 +19,6 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
+
+# firebase credential
+recicanje-74f46-firebase-adminsdk-qgcs1-a2e6fe810e.json

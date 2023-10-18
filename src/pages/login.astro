@@ -1,23 +1,31 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+/* Imagenes */
 import imgHero from "../assets/images/reciclage.svg";
+import fondo from "../assets/images/fondo_2.jfif";
+import reciclajeGif from "../assets/images/logo_reciclaje.gif";
+import fondoReci from "../assets/images/fondo_reci.jpg";
+
+/* Componentes */
 import Input from "../components/Input.astro";
+import FormularioIniciarSesion from "../components/auth/FormularioIniciarSesion.astro";
+import { BotonesAuth } from "../components/auth/BotonesAuth.jsx";
+
+/* Información */
+import { accionesAuth } from "../components/auth/constants/idsBtnAuth";
 
 /* Verifica si ya esta en sesión */
 import { app } from "../firebase/server";
 import { getAuth } from "firebase-admin/auth";
-import FormularioIniciarSesion from "../components/auth/FormularioIniciarSesion.astro";
-import Google from "../components/icons/Google.astro";
-import Facebook from "../components/icons/Facebook.astro";
-import BotontesAuth from "../components/auth/BotontesAuth.astro";
-import { accionesAuth } from "../components/auth/constants/idsBtnAuth";
+
 const auth = getAuth(app);
 
 if (Astro.cookies.has("session")) {
   const sessionCookie = Astro.cookies.get("session").value;
   const decodedCookie = await auth.verifySessionCookie(sessionCookie);
   if (decodedCookie) {
-    return Astro.redirect("/");
+    return Astro.redirect("/feed");
   }
 }
 
@@ -32,34 +40,21 @@ const idsBtnAuth = {
 <Layout title="Inciar sesión">
   <div
     class="bg-gradient-to-b from-emerald-900 via-emerald-950 to-emerald-700
-  min-h-screen w-full text-emerald-100 flex flex-col"
+  min-h-screen w-full text-emerald-100 flex flex-col overflow-hidden"
   >
-    <!-- HEADER CON LOGIN -->
-    <header class="min-h-[100px] flex items-center p-2 shadow-xl px-5">
-      <!-- Logo RECICANJE -->
+    <section class="relative flex flex-wrap lg:h-screen lg:items-center">
       <div
-        class="w-[90%] max-w-[1280px] flex flex-col gap-3 lg:flex-row justify-between items-center mx-auto"
+        class="w-full md:w-1/2 lg:px-8 lg:py-24 z-40
+      flex flex-col items-center justify-center min-h-screen"
       >
-        <h1 class="text-5xl font-bold">RECICANJE</h1>
-        <FormularioIniciarSesion />
-      </div>
-    </header>
-
-    <main
-      class="w-[90%] max-w-[1280px] mx-auto flex-grow items-center justify-center flex"
-    >
-      <div class="w-full flex">
-        <img
-          src={imgHero.src}
-          class="absolute md:static
-     w-[90%] md:w-[50%] max-h-[500px]"
-        />
-
+        <h1 class="text-5xl font-bold animate-pulse text-center mb-2">
+          Recicanje
+        </h1>
         <!-- SECCION PARA CREAR CUENTA -->
         <div
-          class="backdrop-blur-md w-full md:w-[50%] shadow-2xl rounded-xl p-3"
+          class="backdrop-blur-sm w-[90%] mx-auto lg:max-w-[600px] shadow-2xl rounded-xl p-3"
         >
-          <h2 class="text-5xl font-bold">Crea una Cuenta</h2>
+          <h2 class="text-2xl md:text-5xl font-bold">Crea una Cuenta</h2>
           <form id="formRegister" class="flex flex-col gap-1 p-5 pb-2 h-auto">
             <!-- Nombre -->
             <label for="nombreRegister">Nombre/s:</label>
@@ -132,21 +127,55 @@ const idsBtnAuth = {
               type="submit"
               id="btnRegister"
               class="bg-emerald-400 p-2
-        rounded-md">Registarse</button
+ rounded-md">Registarse</button
             >
           </form>
           <!-- Auth -->
-          <BotontesAuth
+          <BotonesAuth
+            client:only
             action={accionesAuth.registro}
             idBtnGoogle={idsBtnAuth.idBtnGoogleRegistro}
             idBtnFacebook={idsBtnAuth.idBtnFacebookRegistro}
             urlFetch="/api/auth/registrarUsuario"
           />
+
+          <p class="flex flex-row gap-2 justify-center mt-2">
+            <span>¿ya tienes una cuenta?</span>
+            <button
+              id="btnAbrirModal"
+              class="text-sky-400 hover:underline hover:underline-offset-2"
+            >
+              iniciar sesión</button
+            >
+          </p>
         </div>
       </div>
-    </main>
+
+      <div
+        id="sectionImage"
+        style={`background-image: 
+          linear-gradient(128deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url("${fondoReci.src}");
+          `}
+        class="w-full h-96 lg:h-full md:w-1/2
+       
+        flex items-center justify-center absolute top-0 bottom-0 min-h-screen md:relative"
+      >
+        <img src={reciclajeGif.src} class="mx-auto" alt="logo del reciclaje" />
+      </div>
+
+      <!-- Formulario para iniciar sesión -->
+      <FormularioIniciarSesion />
+    </section>
   </div>
 </Layout>
+
+<style>
+  #sectionImage {
+    background-clip: border-box;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+</style>
 
 <script>
   import {
@@ -231,22 +260,24 @@ const idsBtnAuth = {
         ...userCredential.user,
         nombre,
         apellido,
+        displayName: `${nombre} ${apellido}`,
       };
 
       await updateProfile(userCredential.user, {
         displayName: `${nombre} ${apellido}`,
       });
+
       const idToken = await userCredential.user.getIdToken();
       const response = await fetch("/api/auth/registrarUsuario", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify(user),
+        body: JSON.stringify({ user }),
       });
 
       if (response.status === 200) {
-        window.location.assign("/");
+        window.location.assign("/feed");
       }
     } catch (e) {
       alert(obtenerMensajeDeError(e.code));

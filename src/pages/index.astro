@@ -1,31 +1,14 @@
 ---
-import { app } from "../firebase/server";
-import { getAuth } from "firebase-admin/auth";
-import Layout from "../layouts/Layout.astro";
 
-const auth = getAuth(app);
-
-/* Verificar la sesión actual */
-if (!Astro.cookies.has("session")) {
-  return Astro.redirect("/login");
-}
-const sessionCookie = Astro.cookies.get("session").value;
-const decodedCookie = await auth.verifySessionCookie(sessionCookie);
-const user = await auth.getUser(decodedCookie.uid);
-
-if (!user) {
-  return Astro.redirect("/signin");
-}
 ---
 
-<Layout title="Recicanje">
-  <h1 class="text-5xl text-center font-bold">
-    Bienvenido/a {user.displayName}
-  </h1>
-  <p>Nos alegra verte aquí</p>
-  <form action="/api/auth/cerrarSesion">
-    <button type="submit">Cerrar sesión</button>
-  </form>
-</Layout>
+<main>
+  Aqui va ir la super landing page del diablo loco de Recicanje ahora que lo
+  pienso tenemos una página login en donde esta el formulario para loguearse y
+  para iniciar sesión entonces la landing redirige a esa página rarisimo pvto el
+  que lee
 
-<script></script>
+  <a class="text-emerald-800 underline underline-offset-2" href="/login"
+    >Ir al login</a
+  >
+</main>

@@ -2,7 +2,6 @@ import { getAuth } from "firebase-admin/auth";
 import { app } from "../../../firebase/server";
 import dbConnect from "../../../libs/dbConnect";
 import Usuario from "../../../models/Usuario";
-import { Types } from "mongoose";
 
 export const POST = async ({ request, cookies }) => {
   const auth = getAuth(app);
@@ -13,6 +12,7 @@ export const POST = async ({ request, cookies }) => {
   const usuarioAuth = body.user;
 
   console.log(body);
+  console.log({ usuarioAuth });
   /* Obtener el token de las cabeceras de la solicitud */
   const idToken = request.headers.get("Authorization")?.split("Bearer ")[1];
   if (!idToken) {
@@ -36,8 +36,8 @@ export const POST = async ({ request, cookies }) => {
       verificarCorreo: usuarioAuth.emailVerified,
       fechaDeRegistro: new Date(),
       ultimoInicioSesion: new Date(),
-      nombre: body.nombre,
-      apellido: body.apellido,
+      nombre: usuarioAuth.nombre,
+      apellido: usuarioAuth.apellido,
       mostrarNombre: usuarioAuth.displayName,
     });
 

@@ -2,34 +2,55 @@ import mongoose, { Schema, models, model } from "mongoose";
 
 const publicacionSchema = new Schema({
   autor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Usuario", // Referencia al modelo de usuario
+    idAutor: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Usuario",
+    },
+    displayName: String,
     required: true,
   },
   contenido: {
-    type: String,
+    tipo: String,
     texto: String,
-    imagenes: [String],
-    videos: [String],
+    multimedia: [String], // urls de los enlaces a los videos o las fotos
   },
   fechaPublicacion: {
     type: Date,
+    default: Date.now,
   },
   comentarios: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comentario",
+      autor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Usuario",
+      },
+      displayName: String,
+      texto: String,
+      fecha: {
+        type: Date,
+        default: Date.now,
+      },
     },
   ],
-
   meGustas: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Usuario",
     },
   ],
+  ubicacion: {
+    tipo: {
+      type: String, // Puede ser 'Point', 'Polygon', 'LineString', etc. según tus necesidades
+      required: true,
+    },
+    coordenadas: {
+      type: [Number], // [longitud, latitud]
+      required: true,
+    },
+  },
 });
 
-const Publicacion = models.Publicacion || model("Publicacion", usuarioSchema);
+const Publicacion =
+  models.Publicacion || model("Publicacion", publicacionSchema);
 
 export default Publicacion;

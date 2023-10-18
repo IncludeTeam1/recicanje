@@ -1,0 +1,79 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+import { ViewTransitions } from "astro:transitions";
+
+import { app } from "../firebase/server";
+import { getAuth } from "firebase-admin/auth";
+
+/* Componentes */
+import { Header } from "../components/react/Header";
+
+const auth = getAuth(app);
+
+/* Verificar la sesión actual */
+if (!Astro.cookies.has("session")) {
+  return Astro.redirect("/login");
+}
+const sessionCookie = Astro.cookies.get("session").value;
+const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+const user = await auth.getUser(decodedCookie.uid);
+
+if (!user) {
+  return Astro.redirect("/signin");
+}
+---
+
+<!-- JS del servidor --><!-- HTML --><!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Poppins:wght@200;300;600;900&family=Righteous&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+    <ViewTransitions />
+  </head>
+  <body
+    class="bg-gradient-to-b
+  min-h-screen w-full bg-slate-100 text-emerald-100 flex flex-col relative"
+  >
+    <Header user={user} client:visible />
+
+    <slot />
+
+    <script></script>
+
+    <!-- CSS -->
+    <style is:global>
+      body {
+        font-family: "Poppins", sans-serif;
+        overflow-x: hidden;
+      }
+      ::-webkit-scrollbar {
+        width: 2px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: green;
+        border-radius: 1em;
+      }
+
+      input,
+      input:focus {
+        outline: none;
+      }
+    </style>
+  </body>
+</html>
