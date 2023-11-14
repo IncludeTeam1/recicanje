@@ -1,39 +1,39 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from '../layouts/Layout.astro';
 
 /* Imagenes */
-import imgHero from "../assets/images/reciclage.svg";
-import fondo from "../assets/images/fondo_2.jfif";
-import reciclajeGif from "../assets/images/logo_reciclaje.gif";
-import fondoReci from "../assets/images/fondo_reci.jpg";
+
+import reciclajeGif from '../assets/images/logo_reciclaje.gif';
+import fondoReci from '../assets/images/fondo_reci.jpg';
 
 /* Componentes */
-import Input from "../components/Input.astro";
-import FormularioIniciarSesion from "../components/auth/FormularioIniciarSesion.astro";
-import { BotonesAuth } from "../components/auth/BotonesAuth.jsx";
+import Input from '../components/Input.astro';
+import FormularioIniciarSesion from '../components/auth/FormularioIniciarSesion.astro';
+import { BotonesAuth } from '../components/auth/BotonesAuth.jsx';
+import { Image } from 'astro:assets';
 
 /* Información */
-import { accionesAuth } from "../components/auth/constants/idsBtnAuth";
+import { accionesAuth } from '../components/auth/constants/idsBtnAuth';
 
 /* Verifica si ya esta en sesión */
-import { app } from "../firebase/server";
-import { getAuth } from "firebase-admin/auth";
+import { app } from '../firebase/server';
+import { getAuth } from 'firebase-admin/auth';
 
 const auth = getAuth(app);
 
-if (Astro.cookies.has("session")) {
-  const sessionCookie = Astro.cookies.get("session").value;
+if (Astro.cookies.has('session')) {
+  const sessionCookie = Astro.cookies.get('session').value;
   const decodedCookie = await auth.verifySessionCookie(sessionCookie);
   if (decodedCookie) {
-    return Astro.redirect("/feed");
+    return Astro.redirect('/feed');
   }
 }
 
 const idsBtnAuth = {
-  idBtnGoogleRegistro: "btnGoogleRegistro",
-  idBtnGoogleInicio: "btnGoogleInicio",
-  idBtnFacebookRegistro: "btnFacebookResgistro",
-  idBtnFacebookInicio: "btnFacebookInicio",
+  idBtnGoogleRegistro: 'btnGoogleRegistro',
+  idBtnGoogleInicio: 'btnGoogleInicio',
+  idBtnFacebookRegistro: 'btnFacebookResgistro',
+  idBtnFacebookInicio: 'btnFacebookInicio',
 };
 ---
 
@@ -42,12 +42,15 @@ const idsBtnAuth = {
     class="bg-gradient-to-b from-emerald-900 via-emerald-950 to-emerald-700
   min-h-screen w-full text-emerald-100 flex flex-col overflow-hidden"
   >
-    <section class="relative flex flex-wrap lg:h-screen lg:items-center">
+    <section class="relative flex flex-wrap h-screen overflow-y-auto">
       <div
         class="w-full md:w-1/2 lg:px-8 lg:py-24 z-40
       flex flex-col items-center justify-center min-h-screen"
       >
-        <h1 class="text-5xl font-bold animate-pulse text-center mb-2">
+        <h1
+          id="texto-maquina"
+          class="text-6xl md:text-7xl font-bold text-center mb-2 text-transparent bg-gradient-to-r from-emerald-700 to-emerald-400 md:to-emerald-500 bg-clip-text transition-all pb-2 text-shadow skew-x-6"
+        >
           Recicanje
         </h1>
         <!-- SECCION PARA CREAR CUENTA -->
@@ -156,11 +159,11 @@ const idsBtnAuth = {
         style={`background-image: 
           linear-gradient(128deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.7) 100%), url("${fondoReci.src}");
           `}
-        class="w-full h-96 lg:h-full md:w-1/2
+        class="w-full md:w-1/2
        
         flex items-center justify-center absolute top-0 bottom-0 min-h-screen md:relative"
       >
-        <img src={reciclajeGif.src} class="mx-auto" alt="logo del reciclaje" />
+        <Image src={reciclajeGif} class="mx-auto" alt="logo del reciclaje" />
       </div>
 
       <!-- Formulario para iniciar sesión -->
@@ -183,59 +186,60 @@ const idsBtnAuth = {
     inMemoryPersistence,
     createUserWithEmailAndPassword,
     updateProfile,
-  } from "firebase/auth";
-  import { app } from "../firebase/client";
-  import { obtenerMensajeDeError } from "../constants/firebase/errores";
+  } from 'firebase/auth';
+  import { app } from '../firebase/client';
+  import { obtenerMensajeDeError } from '../constants/firebase/errores';
+  import { NOMBRE_APP } from '../config';
 
   const auth = getAuth(app);
   // Esto evitará que el navegador almacene los datos de sesión
   auth.setPersistence(inMemoryPersistence);
   /* <-----------------------------inicio de sesión con email y contraseña-----------------> */
   const formRegister = document.querySelector(
-    "#formRegister"
+    '#formRegister',
   ) as HTMLFormElement;
-  const btnRegister = document.querySelector("#btnRegister");
+  const btnRegister = document.querySelector('#btnRegister');
 
   /* Registrarse con email y password */
-  formRegister.addEventListener("submit", async function (event) {
+  formRegister.addEventListener('submit', async function (event) {
     event.preventDefault(); // Evita que el formulario se envíe por defecto
 
     const formData = new FormData(formRegister);
 
     /* Almacena el valor ingresado */
-    const nombre = formData.get("nombreRegister").toString();
-    const apellido = formData.get("apellido").toString();
-    const correo = formData.get("correoRegister").toString();
-    const contraseña = formData.get("contraseñaRegister").toString();
-    const confirmarContra = formData.get("confirmarContra").toString();
+    const nombre = formData.get('nombreRegister').toString();
+    const apellido = formData.get('apellido').toString();
+    const correo = formData.get('correoRegister').toString();
+    const contraseña = formData.get('contraseñaRegister').toString();
+    const confirmarContra = formData.get('confirmarContra').toString();
 
     if (!nombre.trim() || nombre.length < 4) {
-      document.querySelector("#errorNombreRegister").classList.remove("hidden");
+      document.querySelector('#errorNombreRegister').classList.remove('hidden');
       return;
     }
     if (!apellido.trim() || apellido.length < 4) {
       document
-        .querySelector("#errorApellidoRegister")
-        .classList.remove("hidden");
+        .querySelector('#errorApellidoRegister')
+        .classList.remove('hidden');
       return;
     }
     if (!/^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$/.test(correo)) {
-      document.querySelector("#errorCorreoRegister").classList.remove("hidden");
+      document.querySelector('#errorCorreoRegister').classList.remove('hidden');
       return;
     }
     if (contraseña.length < 5) {
-      document.querySelector("#errorContraRegister").classList.remove("hidden");
+      document.querySelector('#errorContraRegister').classList.remove('hidden');
       return;
     }
     if (contraseña !== confirmarContra) {
       document
-        .querySelector("#errorConfirmRegister")
-        .classList.remove("hidden");
+        .querySelector('#errorConfirmRegister')
+        .classList.remove('hidden');
       return;
     }
-    btnRegister.textContent = "Cargando...";
-    btnRegister.classList.add("opacity-50");
-    btnRegister.setAttribute("disabled", "true");
+    btnRegister.textContent = 'Cargando...';
+    btnRegister.classList.add('opacity-50');
+    btnRegister.setAttribute('disabled', 'true');
 
     createUser(nombre, apellido, correo, contraseña);
 
@@ -247,15 +251,14 @@ const idsBtnAuth = {
     nombre: string,
     apellido: string,
     correo: string,
-    contraseña: string
+    contraseña: string,
   ) {
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         correo,
-        contraseña
+        contraseña,
       );
-
       const user = {
         ...userCredential.user,
         nombre,
@@ -268,30 +271,158 @@ const idsBtnAuth = {
       });
 
       const idToken = await userCredential.user.getIdToken();
-      const response = await fetch("/api/auth/registrarUsuario", {
-        method: "POST",
+
+      const response = await fetch(`/api/auth/registrarUsuario`, {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
         body: JSON.stringify({ user }),
       });
 
+      const res = await response.json();
+
+      console.log(res);
       if (response.status === 200) {
-        window.location.assign("/feed");
+        /* Guardar el usuario en sesión en el localStorage */
+        const userData = {
+          uid: userCredential.user.uid,
+          displayName: userCredential.user.displayName,
+          email: userCredential.user.email,
+          photoUrl: userCredential.user.photoURL,
+        };
+
+        localStorage.setItem(
+          `${NOMBRE_APP}-userData`,
+          JSON.stringify(userData),
+        );
+        window.location.assign('/feed');
       }
     } catch (e) {
+      console.log(e);
       alert(obtenerMensajeDeError(e.code));
     }
-    btnRegister.textContent = "Registrarse";
-    btnRegister.removeAttribute("disabled");
-    btnRegister.classList.remove("opacity-50");
+    btnRegister.textContent = 'Registrarse';
+    btnRegister.removeAttribute('disabled');
+    btnRegister.classList.remove('opacity-50');
   }
   /* Reinicia los errores */
-  formRegister.querySelectorAll("input").forEach((input) => {
-    input.addEventListener("input", (e) => {
+  formRegister.querySelectorAll('input').forEach((input) => {
+    input.addEventListener('input', (e) => {
       document
-        .querySelectorAll(".errorInput")
-        .forEach((error) => error.classList.add("hidden"));
+        .querySelectorAll('.errorInput')
+        .forEach((error) => error.classList.add('hidden'));
     });
   });
+
+  const containerTextToWrite = document.getElementById('texto-maquina');
+  const wordsToWrite = [
+    'Recicanje',
+    'Reciclar',
+    'Reutilizar',
+    'Rocco',
+    'Reconectar',
+    'Remover',
+    'Retirar',
+  ];
+
+  function wait(ms: number) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  async function typeWrite(containerText, wordsToWrite: Array<string>) {
+    let indexCurrentWord = 0;
+    let currentWord = wordsToWrite[indexCurrentWord];
+    let lastIndexCurrentWord = currentWord.length;
+
+    let qtWords = wordsToWrite.length;
+    let isDeleting = true;
+
+    while (true) {
+      /* Borrar */
+      if (isDeleting) {
+        lastIndexCurrentWord--;
+      } else {
+        lastIndexCurrentWord++;
+      }
+      containerText.innerText = currentWord.slice(0, lastIndexCurrentWord);
+
+      // Deja la primera letra para borrar
+      if (lastIndexCurrentWord === 1 && isDeleting) {
+        // Cuando sea la ùltima palabra, le da estilos a la primeta
+        if (indexCurrentWord === qtWords - 1) {
+          containerText.classList.add('text-shadow');
+        } else {
+          containerText.classList.remove('text-shadow');
+        }
+
+        await wait(300); // medio segundo antes de escribir la palabra
+        indexCurrentWord =
+          indexCurrentWord === qtWords - 1 ? 0 : indexCurrentWord + 1; // pasa a la siguiente palabra
+        currentWord = wordsToWrite[indexCurrentWord];
+        isDeleting = false;
+      } else if (lastIndexCurrentWord === currentWord.length && !isDeleting) {
+        lastIndexCurrentWord = currentWord.length;
+        isDeleting = true;
+        await wait(2000); // Espera 2 segundos antes de borrar la palabra
+      }
+
+      await wait(80); // Velocidad de escritura
+    }
+  }
+
+  typeWrite(containerTextToWrite, wordsToWrite);
+
+  /* Efecto maquina de escribir */
+  // const containerTextToWrite = document.getElementById('texto-maquina');
+  // const wordsToWrite = [
+  //   'Recicanje',
+  //   'Reciclar',
+  //   'Reutilizar',
+  //   'Rocco',
+  //   'Reconectar',
+  //   'Remover',
+  //   'Retirar',
+  // ];
+  // function typeWrite(containerText, wordsToWrite: Array<string>) {
+  //   let indexCurrentWord = 0;
+  //   let currentWord = wordsToWrite[indexCurrentWord];
+  //   let lastIndexCurrentWord = currentWord.length;
+
+  //   let qtWords = wordsToWrite.length;
+  //   let isDeleting = true;
+
+  //   setInterval(async () => {
+  //     /* Borrar */
+  //     if (isDeleting) {
+  //       lastIndexCurrentWord--;
+  //     } else {
+  //       lastIndexCurrentWord++;
+  //     }
+  //     containerText.innerText = currentWord.slice(0, lastIndexCurrentWord);
+
+  //     // Deja la primera letra para borrar
+  //     if (lastIndexCurrentWord === 1 && isDeleting) {
+  //       indexCurrentWord =
+  //         indexCurrentWord == qtWords - 1 ? 0 : indexCurrentWord + 1; // pasa a la sieguiente palabra
+
+  //       currentWord = wordsToWrite[indexCurrentWord];
+  //       // lastIndexCurrentWord = currentWord.length;
+  //       isDeleting = false;
+  //     } else if (lastIndexCurrentWord === currentWord.length && !isDeleting) {
+  //       lastIndexCurrentWord = currentWord.length;
+  //       isDeleting = true;
+  //     }
+  //     console.log({ lastIndexCurrentWord, isDeleting, indexCurrentWord });
+  //   }, 1000);
+  // }
+  // /* De esta forma si hace lo que se pide que es borrar la palabra, dejar la primera letra y empezar a escribir la  siguiente palabra, pero al pasar de palabra hay que esperar unos dos segundos para que se borre de nuevo la palabra*/
+  // typeWrite(containerTextToWrite, wordsToWrite);
 </script>
+<style>
+  .text-shadow {
+    transform: translateY(-0.5em) scale(1.25);
+    letter-spacing: 2px;
+    filter: brightness(1.25);
+  }
+</style>

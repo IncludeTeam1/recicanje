@@ -7,6 +7,7 @@ usuario. **NOTA: falta agregar ciertos campos en la base de datos, como informac
 
 Como la principal función de astro es renderizar sitios estaticos entonces en gran mayoría viene renderizado por parte del servidor, entonces pasar las props a los compenentes es un poco diferente
 a otras tecnologías que como react, vue, etc... En este caso se crea una carpeta *constants* en la carpeta *components/auth/constants* que es donde se guardan los ids de los botones para que estos sean unicos.
+
 En el archivo de configuración de Astro añadí lo siguiente
 ```
   output: "server",
@@ -32,3 +33,18 @@ por ahora solo usamos la autenticación con correo y contraseña.
 
 - Usamos la autenticación de firebase y los provedores de google y facebook, usamos los endpoints que nos permite utilizar astro.
 
+
+
+
+
+**18/10/2023**
+### backend
+- Estoy usando new Date() para hacer los timestamp.s
+
+### frontend
+- El login con google, el feec, el header y el nav(demo)
+
+
+### 11/11/2023
+
+- Usar siempre la información de los usuarios de **mongoDB**

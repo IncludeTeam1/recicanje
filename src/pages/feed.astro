@@ -1,94 +1,62 @@
 ---
 /* firebase */
-import { app } from "../firebase/server";
-import { getAuth } from "firebase-admin/auth";
+import { app } from '../firebase/server';
+import { getAuth } from 'firebase-admin/auth';
 
 /* Componenentes */
-import { AvatarUser } from "../components/react/AvatarUser";
-import { Feed } from "../components/react/Feed";
 
-import LayoutPrincipal from "../layouts/LayoutPrincipal.astro";
+import { SeccionPublicaciones } from '../components/react/feed/SeccionPublicaciones';
+import { SugerenciasContactos } from '../components/react/SugerenciasContactos';
+
+import LayoutPrincipal from '../layouts/LayoutPrincipal.astro';
+import { BASE_URL_API } from '../config';
+
+import { TarjetaUsuario } from '../components/auth/TarjetaUsuario';
 
 const auth = getAuth(app);
 /* Verifica si esta en sesión */
-if (!Astro.cookies.has("session")) {
-  return Astro.redirect("/login");
+if (!Astro.cookies.has('session')) {
+  return Astro.redirect('/login');
 }
-const sessionCookie = Astro.cookies.get("session").value;
+const sessionCookie = Astro.cookies.get('session').value;
 const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+/* Información del usuario, sus credenciales */
+const userAuth = await auth.getUser(decodedCookie.uid);
+const res = await fetch(`${BASE_URL_API}/api/usuarios/obtenerUsuario`, {
+  method: 'POST',
+  body: JSON.stringify({ uid: userAuth.uid }),
+});
 
-const user = await auth.getUser(decodedCookie.uid);
+// console.log(Astro.locals)
 
+const { infoUsuario } = await res.json();
+
+const user = { ...userAuth, ...infoUsuario };
+console.log(user);
 if (!user) {
-  return Astro.redirect("/signin");
+  return Astro.redirect('/signin');
 }
-
-const bg =
-  "https://img.freepik.com/vector-premium/patron-fisuras-reciclaje-separacion-basura-co2-concepto-cambio-climatico-doodle-vectorial_414360-2797.jpg";
 ---
 
 <LayoutPrincipal title="Recicanje">
   <div
-    class="
-    pb-[100px]  sm:-pb-[100px] md:p-5
-    
-    bg-slate-100 flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1200px]   flex flex-col items-start md:flex-row gap-5"
+    id="page-feed"
+    class="flex flex-col items-start md:flex-row gap-5 seccion-observar"
   >
     <!-- RESUMEN DE LA INFORMACIÖN DEL USUARIO -> TARJETICA BIEN MELA -->
-    <section
-      class="w-full flex justify-center flex-col items-center bg-white shadow-lg rounded-md md:w-[220px] overflow-hidden flex-shrink-0"
-    >
-      <!--  -->
-      <div
-        class="h-[60px] bg-cover aspect-video bg-no-repeat w-full bg-center block"
-        style={`background-image:url(${bg})`}
-      >
-      </div>
-
-      <div class="flex flex-col items-center gap-2 -translate-y-6">
-        <AvatarUser client:visible className="w-14 h-14" user={user} />
-        <p class="text-sm w-[90%] text-center">
-          {user.displayName}
-        </p>
-      </div>
-      <!--  -->
-      <div class="flex flex-col gap-2 w-full text-sm">
-        <span class="block border-b w-full border-gray-300"></span>
-        <div class="flex justify-around w-full p-2">
-          <p>Contactos</p>
-          <p>23</p>
-        </div>
-
-        <span class="block border-b w-full border-gray-300"></span>
-        <div class="flex justify-around w-full p-2 text-[12px]">
-          <p>
-            Contacte con las personas más cercanas <a
-              href="#"
-              class="text-violet-700 underline-offset-2 underline"
-              >puedes encontrarlas aquí</a
-            >
-          </p>
-        </div>
-      </div>
-
-      <form class="text-black p-2" action="/api/auth/cerrarSesion">
-        <button
-          class="bg-rose-600 p-1 text-sm rounded-3xl text-white"
-          type="submit">Cerrar sesión</button
-        >
-      </form>
-    </section>
+    <TarjetaUsuario
+      className=" md:sticky md:top-[5em]"
+      user={user}
+      client:only
+    />
 
     <!-- FEED -->
-    <Feed client:visible user={user} />
+    <SeccionPublicaciones user={user} client:only />
 
     <!-- ARTICLE -->
-    <article class="border hidden lg:flex lg:w-[200px] flex-shrink-0">
-      Aqui van las sugerencias para seguir
-    </article>
+
+    <SugerenciasContactos client:only user={user} />
   </div>
 </LayoutPrincipal>
 
 <script></script>
-
-<!-- Esta es el feed -->

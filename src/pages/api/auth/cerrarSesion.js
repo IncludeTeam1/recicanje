@@ -1,6 +1,12 @@
-export const GET = async ({ redirect, cookies }) => {
-  cookies.delete("session", {
-    path: "/",
+import { createResponse } from '../../../utils/createResponse';
+
+export const GET = async ({ cookies }) => {
+  cookies.delete('session', {
+    path: '/',
   });
-  return redirect("/login");
+  return new Response(
+    createResponse({
+      msg: 'Sesión cerrada correctamente',
+    })
+  );
 };

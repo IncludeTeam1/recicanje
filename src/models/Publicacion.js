@@ -1,18 +1,29 @@
-import mongoose, { Schema, models, model } from "mongoose";
-
+import mongoose from 'mongoose';
+const { Schema, model, models } = mongoose;
+delete mongoose.connection.models['Publicacion'];
 const publicacionSchema = new Schema({
   autor: {
     idAutor: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Usuario",
+      ref: 'Usuario',
+      required: true,
     },
-    displayName: String,
-    required: true,
+    displayName: {
+      type: String,
+      required: true,
+    },
+    photoURL: String,
+    uid: String,
   },
   contenido: {
     tipo: String,
     texto: String,
-    multimedia: [String], // urls de los enlaces a los videos o las fotos
+    multimedia: [
+      {
+        url: String,
+        nombreFile: String,
+      },
+    ], // urls de los enlaces a los videos o las fotos
   },
   fechaPublicacion: {
     type: Date,
@@ -21,10 +32,19 @@ const publicacionSchema = new Schema({
   comentarios: [
     {
       autor: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Usuario",
+        idAutor: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Usuario',
+          required: true,
+        },
+        displayName: {
+          type: String,
+          required: true,
+        },
+        photoURL: String,
+        uid: String,
       },
-      displayName: String,
+
       texto: String,
       fecha: {
         type: Date,
@@ -34,11 +54,28 @@ const publicacionSchema = new Schema({
   ],
   meGustas: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Usuario",
+      autor: {
+        idAutor: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Usuario',
+          required: true,
+        },
+        displayName: {
+          type: String,
+          required: true,
+        },
+        photoURL: String,
+        uid: String,
+      },
+
+      fecha: {
+        type: Date,
+        default: Date.now,
+      },
     },
   ],
-  ubicacion: {
+
+  /* ubicacion: {
     tipo: {
       type: String, // Puede ser 'Point', 'Polygon', 'LineString', etc. según tus necesidades
       required: true,
@@ -47,10 +84,10 @@ const publicacionSchema = new Schema({
       type: [Number], // [longitud, latitud]
       required: true,
     },
-  },
+  }, */
 });
 
 const Publicacion =
-  models.Publicacion || model("Publicacion", publicacionSchema);
+  models.Publicacion || model('Publicacion', publicacionSchema);
 
 export default Publicacion;

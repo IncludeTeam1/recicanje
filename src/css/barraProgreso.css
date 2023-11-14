@@ -1,0 +1,19 @@
+#barra-de-carga {
+  height: 5px;
+  width: 100%;
+  background-color: #3b3b3b;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+}
+
+#barra-de-carga .carga {
+  content: "";
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background: #f341a2;
+
+  transform: translateX(-100%);
+}

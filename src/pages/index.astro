@@ -1,14 +1,73 @@
 ---
+interface Props {
+  title: string;
+}
 
+const { title } = Astro.props;
+import { ViewTransitions } from 'astro:transitions';
+
+import { app } from '../firebase/server';
+import { getAuth } from 'firebase-admin/auth';
+
+/* Componentes */
+import { Header } from '../components/react/Header';
+
+const auth = getAuth(app);
+
+const sessionCookie = Astro.cookies.get('session')?.value;
+if (sessionCookie) {
+  const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+  const user = await auth.getUser(decodedCookie.uid);
+  if (user) {
+    return Astro.redirect('/feed');
+  }
+}
 ---
 
-<main>
-  Aqui va ir la super landing page del diablo loco de Recicanje ahora que lo
-  pienso tenemos una página login en donde esta el formulario para loguearse y
-  para iniciar sesión entonces la landing redirige a esa página rarisimo pvto el
-  que lee
-
-  <a class="text-emerald-800 underline underline-offset-2" href="/login"
-    >Ir al login</a
+<!-- JS del servidor --><!-- HTML --><!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Recicanje</title>
+    <ViewTransitions />
+  </head>
+  <body
+    class="bg-gradient-to-b from-emerald-900 via-emerald-950 to-emerald-700
+  min-h-screen w-full text-emerald-100 flex flex-col"
   >
-</main>
+    <main>
+      Aqui va ir la super landing page del diablo loco de Recicanje ahora que lo
+      pienso tenemos una página login en donde esta el formulario para loguearse
+      y para iniciar sesión entonces la landing redirige a esa página rarisimo
+      pvto el que lee
+
+      <a class="text-emerald-800 underline underline-offset-2" href="/login"
+        >Ir al login</a
+      >
+    </main>
+    <script></script>
+
+    <!-- CSS -->
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+
+      input,
+      input:focus {
+        outline: none;
+      }
+
+      button {
+        transition: 0.2s;
+      }
+      button:hover {
+        transform: scale(0.96);
+      }
+    </style>
+  </body>
+</html>

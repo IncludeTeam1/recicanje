@@ -1,0 +1,51 @@
+---
+import LayoutPrincipal from '../layouts/LayoutPrincipal.astro';
+import { SeccionContactos } from '../components/react/red/SeccionContactos';
+
+// import { BASE_URL_API } from "../../config";
+import { UsersIcon } from '../icons/UsersIcon';
+// const res = await fetch(`${BASE_URL_API}/api/usuarios/obtenerSugerencias`);
+
+// export const prerender = false;
+---
+
+<!-- Esta página no usa mucho JS, va a ser estatico las sugerencias se mostraran al momento de cargar la página -->
+<LayoutPrincipal title="Mi red">
+  <div
+    id="page-mi-red"
+    class="flex-grow text-black w-full flex flex-col items-start md:flex-row gap-5
+  seccion-observar"
+  >
+    <!-- Nav  -->
+    <aside
+      class="w-full md:w-[220px] flex-shrink-0
+    border bg-white shadow-md rounded-md flex flex-col gap-1 overflow-hidden"
+    >
+      <h2 class="text-xl text-gray-500 p-3 text-center">Gestionar mi red</h2>
+      <div class="flex flex-col">
+        <a
+          href="/mi-red/contactos"
+          class="flex gap-1 items-center p-3 hover:bg-gray-300 cursor-pointer w-full"
+        >
+          <span
+            ><UsersIcon className="stroke-black w-2 h-2" stroke="#000" /></span
+          > Contactos
+        </a>
+
+        <a
+          href="/mi-red"
+          class="flex gap-1 items-center hover:bg-gray-300 cursor-pointer w-full
+        p-3 bg-gray-100"
+        >
+          <span
+            ><UsersIcon className="stroke-black w-2 h-2" stroke="#000" /></span
+          > Sugerencias de contacto
+        </a>
+      </div>
+    </aside>
+
+    <SeccionContactos client:only />
+  </div>
+</LayoutPrincipal>
+
+<script></script>

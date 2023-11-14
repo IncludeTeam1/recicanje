@@ -4,27 +4,34 @@ interface Props {
 }
 
 const { title } = Astro.props;
-import { ViewTransitions } from "astro:transitions";
+import { ViewTransitions } from 'astro:transitions';
 
-import { app } from "../firebase/server";
-import { getAuth } from "firebase-admin/auth";
+import { app } from '../firebase/server';
+import { getAuth } from 'firebase-admin/auth';
 
 /* Componentes */
-import { Header } from "../components/react/Header";
+import { Header } from '../components/react/Header';
+import { BASE_URL_API, NOMBRE_APP } from '../config';
 
 const auth = getAuth(app);
 
 /* Verificar la sesión actual */
-if (!Astro.cookies.has("session")) {
-  return Astro.redirect("/login");
+if (!Astro.cookies.has('session')) {
+  return Astro.redirect('/login');
 }
-const sessionCookie = Astro.cookies.get("session").value;
+const sessionCookie = Astro.cookies.get('session').value;
 const decodedCookie = await auth.verifySessionCookie(sessionCookie);
-const user = await auth.getUser(decodedCookie.uid);
+const userAuth = await auth.getUser(decodedCookie.uid);
 
-if (!user) {
-  return Astro.redirect("/signin");
+if (!userAuth) {
+  return Astro.redirect('/signin');
 }
+
+const res = await fetch(`${BASE_URL_API}/api/usuarios/obtenerUsuario`, {
+  method: 'POST',
+  body: JSON.stringify({ uid: userAuth.uid }),
+});
+const { infoUsuario: user } = await res.json();
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
@@ -47,18 +54,23 @@ if (!user) {
   </head>
   <body
     class="bg-gradient-to-b
-  min-h-screen w-full bg-slate-100 text-emerald-100 flex flex-col relative"
+  min-h-screen w-full bg-slate-100 text-black flex flex-col relative"
   >
-    <Header user={user} client:visible />
+    <Header user={user} client:only />
 
-    <slot />
+    <main
+      class="pb-[100px] sm:-pb-[100px] md:p-5
+    bg-slate-100 flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1300px]"
+    >
+      <slot />
+    </main>
 
     <script></script>
 
     <!-- CSS -->
     <style is:global>
       body {
-        font-family: "Poppins", sans-serif;
+        font-family: 'Poppins', sans-serif;
         overflow-x: hidden;
       }
       ::-webkit-scrollbar {

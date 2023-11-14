@@ -1,16 +1,16 @@
-function UsersIcon({ className = "" }) {
+function UsersIcon({ className = "", stroke = "#fff" }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      classname={`icon" icon-tabler icon-tabler-users-group ${className}`}
+      className={`icon" icon-tabler icon-tabler-users-group ${className}`}
       width={34}
       height={34}
       viewBox="0 0 24 24"
-      strokewidth="1.5"
-      stroke="#ffffff"
+      strokeWidth="1.5"
+      stroke={stroke}
       fill="none"
-      strokelinecap="round"
-      strokelinejoin="round"
+      strokeLinecap="round"
+      strokeLinejoin="round"
     >
       <path stroke="none" d="M0 0h24v24H0z" fill="none" />
       <path d="M10 13a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />

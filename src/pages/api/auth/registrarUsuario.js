@@ -1,26 +1,25 @@
-import { getAuth } from "firebase-admin/auth";
-import { app } from "../../../firebase/server";
-import dbConnect from "../../../libs/dbConnect";
-import Usuario from "../../../models/Usuario";
+import { getAuth } from 'firebase-admin/auth';
+import { app } from '../../../firebase/server';
+import dbConnect from '../../../libs/dbConnect';
+import Usuario from '../../../models/Usuario';
+import { createResponse } from '../../../utils/createResponse';
 
 export const POST = async ({ request, cookies }) => {
-  const auth = getAuth(app);
-
-  await dbConnect();
-
-  const body = await request.json();
-  const usuarioAuth = body.user;
-
-  console.log(body);
-  console.log({ usuarioAuth });
-  /* Obtener el token de las cabeceras de la solicitud */
-  const idToken = request.headers.get("Authorization")?.split("Bearer ")[1];
-  if (!idToken) {
-    return new Response("Token no encontrado", { status: 401 });
-  }
-
   try {
+    const auth = getAuth(app);
+
+    const body = await request.json();
+    const usuarioAuth = body.user;
+    
+    console.log(usuarioAuth);
+
+    /* Obtener el token de las cabeceras de la solicitud */
+    const idToken = request.headers.get('Authorization')?.split('Bearer ')[1];
+    if (!idToken) {
+      return new Response('Token no encontrado', { status: 401 });
+    }
     /* Verifica el token */
+    await dbConnect();
     await auth.verifyIdToken(idToken);
 
     /* Crear y establecer una cookie de sesión */
@@ -30,7 +29,7 @@ export const POST = async ({ request, cookies }) => {
     });
 
     /* Crear el usuario y almacenarlo en la base de datos. */
-    const resMongo = await Usuario.create({
+    const resDb = await Usuario.create({
       uid: usuarioAuth.uid,
       correoElectronico: usuarioAuth.email,
       verificarCorreo: usuarioAuth.emailVerified,
@@ -38,23 +37,27 @@ export const POST = async ({ request, cookies }) => {
       ultimoInicioSesion: new Date(),
       nombre: usuarioAuth.nombre,
       apellido: usuarioAuth.apellido,
-      mostrarNombre: usuarioAuth.displayName,
+      displayName: usuarioAuth.displayName,
+      photoURL: usuarioAuth.photoURL,
     });
 
-    console.log(resMongo);
-
-    cookies.set("session", sessionCookie, {
-      path: "/",
+    cookies.set('session', sessionCookie, {
+      path: '/',
     });
-
-    return new Response(resMongo, {
-      status: 200,
-    });
+    console.log(resDb);
+    return new Response(
+      createResponse({
+        resDb,
+      }),
+      {
+        status: 200,
+      }
+    );
   } catch (error) {
     console.log(error);
     return new Response(
       JSON.stringify({
-        mensaje: "Algo salió mal",
+        mensaje: 'Algo salió mal',
         error,
       }),
       { status: 400 }

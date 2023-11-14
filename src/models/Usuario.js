@@ -1,5 +1,6 @@
-import mongoose, { Schema, models, model } from "mongoose";
-delete mongoose.connection.models['Usuario'];
+import mongoose from "mongoose";
+const { Schema, model, models } = mongoose;
+delete mongoose.connection.models["Usuario"];
 const usuarioSchema = new Schema({
   uid: {
     type: String,
@@ -29,7 +30,13 @@ const usuarioSchema = new Schema({
     type: Date,
     default: null,
   },
-  mostrarNombre: {
+  displayName: {
+    type: String,
+  },
+  photoURL: {
+    type: String,
+  },
+  portadaURL: {
     type: String,
   },
   // como si fueran amigos
