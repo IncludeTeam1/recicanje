@@ -1,20 +1,14 @@
+import { string } from 'astro/zod';
 import mongoose from 'mongoose';
 const { Schema, model, models } = mongoose;
 delete mongoose.connection.models['Publicacion'];
 const publicacionSchema = new Schema({
   autor: {
-    idAutor: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Usuario',
-      required: true,
-    },
-    displayName: {
-      type: String,
-      required: true,
-    },
-    photoURL: String,
-    uid: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario',
+    required: true,
   },
+
   contenido: {
     tipo: String,
     texto: String,
@@ -31,41 +25,17 @@ const publicacionSchema = new Schema({
   },
   comentarios: [
     {
-      autor: {
-        idAutor: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Usuario',
-          required: true,
-        },
-        displayName: {
-          type: String,
-          required: true,
-        },
-        photoURL: String,
-        uid: String,
-      },
-
-      texto: String,
-      fecha: {
-        type: Date,
-        default: Date.now,
-      },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comentario',
     },
+    ,
   ],
   meGustas: [
     {
       autor: {
-        idAutor: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Usuario',
-          required: true,
-        },
-        displayName: {
-          type: String,
-          required: true,
-        },
-        photoURL: String,
-        uid: String,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario',
+        required: true,
       },
 
       fecha: {

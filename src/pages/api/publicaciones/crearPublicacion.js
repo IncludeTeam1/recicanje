@@ -1,7 +1,7 @@
-import { getAuth } from "firebase/auth";
-import dbConnect from "../../../libs/dbConnect";
-import { app } from "../../../firebase/server";
-import Publicacion from "../../../models/Publicacion";
+import { getAuth } from 'firebase/auth';
+import dbConnect from '../../../libs/dbConnect';
+import { app } from '../../../firebase/server';
+import Publicacion from '../../../models/Publicacion';
 
 export const POST = async ({ request, cookies }) => {
   const { data } = await request.json();
@@ -28,12 +28,11 @@ export const POST = async ({ request, cookies }) => {
     });
 
     return new Response(JSON.stringify({ resDb, status: 200 }));
-
   } catch (error) {
     console.log(error);
     return new Response(
       JSON.stringify({
-        mensaje: "Algo salió mal",
+        mensaje: 'Algo salió mal',
         error,
       }),
       { status: 400 }

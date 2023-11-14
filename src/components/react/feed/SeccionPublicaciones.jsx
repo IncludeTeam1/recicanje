@@ -6,12 +6,15 @@ import { FormularioPublicacion } from './FormularioPublicacion';
 
 import { LoaderReci } from '../LoaderReci.jsx';
 import { usePublicaciones } from '../../../hooks/usePublicaciones.js';
+import { NOMBRE_APP } from '../../../config.js';
 
-function SeccionPublicaciones({ user = {}, uid = '' }) {
+function SeccionPublicaciones({ user = {}, _id = '' }) {
   const [abrirModalPublicacion, setAbrirModalPublicacion] = useState(false);
-
+  const userInSesion = JSON.parse(
+    localStorage.getItem(`${NOMBRE_APP}-userData`)
+  );
   const [page, setPage] = useState(1);
-
+  console.log(user);
   const {
     publicaciones,
     loading,
@@ -19,9 +22,11 @@ function SeccionPublicaciones({ user = {}, uid = '' }) {
     nextLoading,
     hayMasPublicaciones,
   } = usePublicaciones({
-    uid,
+    _id,
     page,
   });
+
+  console.log(publicaciones);
 
   return (
     <>
@@ -35,21 +40,24 @@ function SeccionPublicaciones({ user = {}, uid = '' }) {
       )}
       <main className="w-full min-w-[300px] flex flex-col gap-3 md:w-auto flex-grow ">
         {/* Menú para subir una publicación */}
-        <div className="bg-white rounded-md w-full p-3 shadow-lg">
-          {/* <--Boton principal--> */}
-          <div className="flex gap-1">
-            <AvatarUser user={user} />
-            <button
-              onClick={() => {
-                setAbrirModalPublicacion(!abrirModalPublicacion);
-              }}
-              className="flex-grow text-left pl-3 border rounded-[25PX] hover:bg-gray-200 transition-all"
-            >
-              Crear publicación
-            </button>
-          </div>
-        </div>
 
+        {(user.uid === userInSesion.uid || _id === '') && (
+          <div className="bg-white rounded-md w-full p-3 shadow-lg">
+            {/* <--Boton principal--> */}
+            <div className="flex gap-1">
+              <AvatarUser user={user} />
+
+              <button
+                onClick={() => {
+                  setAbrirModalPublicacion(!abrirModalPublicacion);
+                }}
+                className="flex-grow text-left pl-3 border rounded-[25PX] hover:bg-gray-200 transition-all"
+              >
+                Crear publicación
+              </button>
+            </div>
+          </div>
+        )}
         {/* Publicaciones */}
 
         {loading ? (
@@ -70,7 +78,15 @@ function SeccionPublicaciones({ user = {}, uid = '' }) {
                 );
               })
             ) : (
-              <h2>No hay publicaciones aún</h2>
+              <div className="">
+                <h2
+                  className="text-xl block text-center font-bold
+                  p-2
+                "
+                >
+                  No hay publicaciones{' '}
+                </h2>
+              </div>
             )}
 
             {/* Cargar más publicaciones */}

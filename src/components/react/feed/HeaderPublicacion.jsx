@@ -7,10 +7,10 @@ function HeaderPublicacion({ publicacion }) {
   const usuarioSesion = JSON.parse(
     localStorage.getItem(`${NOMBRE_APP}-userData`)
   );
-
+  
   const [updatedUser, setUpdatedUser] = useState(publicacion.autor); // que sea por defecto el usuario de las props
 
-  useEffect(() => {
+  /* useEffect(() => {
     fetch(`/api/usuarios/obtenerUsuario`, {
       method: 'POST',
       body: JSON.stringify({ uid: publicacion.autor.uid }),
@@ -22,7 +22,7 @@ function HeaderPublicacion({ publicacion }) {
       .catch((e) => {
         console.log(e);
       });
-  }, []);
+  }, []); */
 
   async function handleDeletePublicacion(e) {
     const conf = confirm('Seguro desea eliminar esta publicación?');

@@ -33,6 +33,12 @@ function Header({ user = {} }) {
       href: `/perfil/${user.uid}`,
     },
   ];
+  const [currentUser, setCurrentUser] = useState(user);
+  useEffect(() => {
+    fetch(`/api/usuarios/obtenerUsuario`)
+      .then((res) => res.json())
+      .then((u) => setCurrentUser(u));
+  }, []);
 
   const linksAsociados = {
     'page-feed': 'Inicio',
@@ -81,7 +87,7 @@ function Header({ user = {} }) {
             className="flex flex-col justify-center items-center"
             href={`/perfil/${user.uid}`}
           >
-            <AvatarUser className="w-10 h-8 md:hidden" user={user} />
+            <AvatarUser className="w-10 h-8 md:hidden" user={currentUser} />
           </a>
         </div>
 

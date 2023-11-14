@@ -31,13 +31,15 @@ function SugerenciasContactos({ user = {}, limit = 4 }) {
   }, []);
 
   return (
-    <article class=" hidden lg:flex lg:w-[200px] xl:w-[250px] flex-shrink-0 rounded-xl overflow-hidden bg-white shadow-md">
+    <article className=" hidden lg:flex lg:w-[200px] xl:w-[250px] flex-shrink-0 rounded-xl overflow-hidden bg-white shadow-md">
       {loading ? (
         <p className="text-center grid animate-pulse place-content-center w-full min-h-[100px]">
           Cargando...
         </p>
       ) : sugerencias.length < 1 ? (
-        <p>No hay personas</p>
+        <div className="p-2">
+          <p className='text-xl text-center' >No hay personas</p>
+        </div>
       ) : (
         <div className="flex flex-col  w-full gap-3 ">
           {sugerencias

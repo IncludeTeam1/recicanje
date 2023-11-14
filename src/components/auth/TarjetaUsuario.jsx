@@ -5,8 +5,12 @@ const bg =
   'https://img.freepik.com/vector-premium/patron-fisuras-reciclaje-separacion-basura-co2-concepto-cambio-climatico-doodle-vectorial_414360-2797.jpg';
 
 function TarjetaUsuario({ user, className = '' }) {
+  const userInSesion = JSON.parse(
+    localStorage.getItem(`${NOMBRE_APP}-userData`)
+  );
+
   async function handleSubmit(e) {
-    console.log("cerrar")
+    console.log('cerrar');
     e.preventDefault();
     const res = await fetch('/api/auth/cerrarSesion');
 
@@ -55,14 +59,16 @@ function TarjetaUsuario({ user, className = '' }) {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="text-black p-2">
-        <button
-          className="bg-rose-600 p-1 text-sm rounded-3xl text-white"
-          type="submit"
-        >
-          Cerrar sesión
-        </button>
-      </form>
+      {user.uid === userInSesion.uid && (
+        <form onSubmit={handleSubmit} className="text-black p-2">
+          <button
+            className="bg-rose-600 p-1 text-sm rounded-3xl text-white"
+            type="submit"
+          >
+            Cerrar sesión
+          </button>
+        </form>
+      )}
     </section>
   );
 }

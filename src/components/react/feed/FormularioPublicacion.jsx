@@ -38,12 +38,7 @@ function FormularioPublicacion({ user = {}, open, setOpen, refresh }) {
       /* Información requerida para la publicación */
 
       let data = {
-        autor: {
-          idAutor: user._id,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-          uid: user.uid,
-        },
+        autor: user._id,
       };
       /* Archivo multimeda */
       if (file) {
