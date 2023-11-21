@@ -1,4 +1,3 @@
-import { string } from 'astro/zod';
 import mongoose from 'mongoose';
 const { Schema, model, models } = mongoose;
 delete mongoose.connection.models['Publicacion'];
@@ -21,7 +20,7 @@ const publicacionSchema = new Schema({
   },
   fechaPublicacion: {
     type: Date,
-    default: Date.now,
+    default: Date.now(),
   },
   comentarios: [
     {
@@ -40,10 +39,22 @@ const publicacionSchema = new Schema({
 
       fecha: {
         type: Date,
-        default: Date.now,
+        default: new Date(),
       },
     },
   ],
+  cantidadMeGustas: {
+    type: Number,
+    default: 0,
+  },
+  cantidadComentarios: {
+    type: Number,
+    default: 0,
+  },
+  disteMegusta: {
+    type: Boolean,
+    default: false,
+  },
 
   /* ubicacion: {
     tipo: {

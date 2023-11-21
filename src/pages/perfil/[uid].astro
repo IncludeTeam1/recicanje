@@ -23,6 +23,7 @@ import { getAuth } from 'firebase-admin/auth';
 
 import { SeccionPublicaciones } from '../../components/react/feed/SeccionPublicaciones';
 import { TarjetaUsuario } from '../../components/auth/TarjetaUsuario';
+import { UsersIcon } from '../../icons/UsersIcon';
 
 const auth = getAuth(app);
 
@@ -32,42 +33,53 @@ if (sessionCookie) {
   infoUsuarioSesion = await auth.verifySessionCookie(sessionCookie);
 }
 
-const user = {
-  ...infoUsuarioSesion,
-  ...infoUsuario,
-};
+
 ---
 
 <!-- Esta página no usa mucho JS, va a ser estatico las sugerencias se mostraran al momento de cargar la página -->
 <LayoutPrincipal title="Perfil">
-  <header
-    id="page-mi-perfil"
-    class={`w-full mx-auto text-black  rounded-md 
-        flex gap-5 items-start  mb-3 ${
-          infoUsuario?.uid === infoUsuarioSesion?.uid && 'seccion-observar'
-        }`}
-  >
-    <!-- Información del perfil -->
-    <HeaderUsuario infoUsuario={infoUsuario} client:only />
+ {infoUsuario ?  <header
+  id="page-mi-perfil"
+  class={`w-full mx-auto text-black  rounded-md 
+      flex gap-5 items-start  mb-3 ${
+        infoUsuario?.uid === infoUsuarioSesion?.uid && 'seccion-observar'
+      }`}
+>
+  <!-- Información del perfil -->
+  <HeaderUsuario infoUsuario={infoUsuario} client:only />
 
-    <SugerenciasContactos client:only />
-  </header>
+  <SugerenciasContactos client:only />
+</header>
 
-  <section class="max-w-[1300px] flex gap-3 items-start">
-    <TarjetaUsuario
-      client:only
-      className="hidden md:flex md:w-[300px] lg:w-[400px] md:sticky md:top-[5em]"
-      user={infoUsuario}
-    />
+<section class="max-w-[1300px] flex gap-3 items-start">
+  <TarjetaUsuario
+    client:only
+    className="hidden md:flex md:w-[300px] lg:w-[400px] md:sticky md:top-[5em]"
+    user={infoUsuario}
+    
 
-    <!-- Las publicaciones -->
+  />
 
-    <SeccionPublicaciones
-      user={infoUsuario}
-      _id={infoUsuario?._id}
-      client:only
-    />
-  </section>
+  <!-- Las publicaciones -->
+
+  <SeccionPublicaciones
+    user={infoUsuario}
+    autor_id={infoUsuario?._id}
+    client:only
+  />
+</section> :
+ <div class="flex m-auto mt-5 flex-col items-center gap-5" > 
+
+  <div class="border bg-white p-5 w-8/12 mx-auto shadow-md" >
+    <AvatarUser user={{}} className='w-44 h-44 mx-auto' />
+    <h1 class="text-xl text-center font-bold flex items-center gap-1 justify-center" >Usuario no encontrado 
+      <UsersIcon className='stroke-black' />
+      </h1>
+    </div>
+    <a href="/feed" class="border p-3 text-cyan-600 border-cyan-600 rounded-md hover:rounded-2xl hover:bg-cyan-50 transition-all " >Volver al home</a>
+</div>
+
+}
 </LayoutPrincipal>
 
 <script>

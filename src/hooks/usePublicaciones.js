@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 
-export function usePublicaciones({ _id = '', page = 1 }) {
-  console.log(_id);
-
+export function usePublicaciones({ autor_id = '', page = 1 }) {
   const [publicaciones, setPublicaciones] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -17,7 +15,7 @@ export function usePublicaciones({ _id = '', page = 1 }) {
     let opciones = {
       method: 'POST',
       body: JSON.stringify({
-        _id,
+        autor_id,
       }),
     };
     setLoading(true);
@@ -40,7 +38,7 @@ export function usePublicaciones({ _id = '', page = 1 }) {
     let opciones = {
       method: 'POST',
       body: JSON.stringify({
-        _id,
+        autor_id,
         page,
       }),
     };

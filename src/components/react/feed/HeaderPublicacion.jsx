@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { NOMBRE_APP } from '../../../config';
 import { AvatarUser } from '../AvatarUser';
 import { BotonAccion } from '../BotonAccion';
+import { createTimeAgo } from '../../../helpers/timeAgo';
 
-function HeaderPublicacion({ publicacion }) {
+function HeaderPublicacion({ refresh, publicacion }) {
   const usuarioSesion = JSON.parse(
     localStorage.getItem(`${NOMBRE_APP}-userData`)
   );
-  
+
   const [updatedUser, setUpdatedUser] = useState(publicacion.autor); // que sea por defecto el usuario de las props
 
   /* useEffect(() => {
@@ -23,20 +24,25 @@ function HeaderPublicacion({ publicacion }) {
         console.log(e);
       });
   }, []); */
-
+  /* Eliminar publicacion */
   async function handleDeletePublicacion(e) {
     const conf = confirm('Seguro desea eliminar esta publicación?');
     if (conf) {
-      const res = await fetch(`/api/publicaciones/eliminarPublicacion`, {
-        method: 'DELETE',
-        body: JSON.stringify({
-          idPublicacion: publicacion._id,
-        }),
-      });
-      if (res.status === 200) {
-        alert('Publicación elimnada correctamente');
-        refresh();
-      } else {
+      try {
+        const res = await fetch(`/api/publicaciones/eliminarPublicacion`, {
+          method: 'DELETE',
+          body: JSON.stringify({
+            idPublicacion: publicacion._id,
+          }),
+        });
+        if (res.status === 200) {
+          alert('Publicación elimnada correctamente');
+          refresh();
+        } else {
+          alert('No se ha podido eliminar la publicación');
+        }
+      } catch (error) {
+        console.log(error);
         alert('No se ha podido eliminar la publicación');
       }
     }
@@ -47,8 +53,13 @@ function HeaderPublicacion({ publicacion }) {
       <a className="flex gap-2 w-  " href={`/perfil/${publicacion.autor.uid}`}>
         <AvatarUser user={updatedUser} />{' '}
         <p className="flex flex-col ">
-          <span>{updatedUser.displayName}</span>
-          <small className="text-[12px]"> {publicacion.fechaPublicacion}</small>
+          <span className="font-bold text-gray-600 tracking-wide">
+            {updatedUser.displayName}
+          </span>
+          <small className="text-[12px]">
+            {' '}
+            {createTimeAgo(publicacion.fechaPublicacion, 'long')}
+          </small>
         </p>
       </a>
 

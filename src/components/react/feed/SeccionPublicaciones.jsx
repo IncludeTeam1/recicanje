@@ -8,13 +8,12 @@ import { LoaderReci } from '../LoaderReci.jsx';
 import { usePublicaciones } from '../../../hooks/usePublicaciones.js';
 import { NOMBRE_APP } from '../../../config.js';
 
-function SeccionPublicaciones({ user = {}, _id = '' }) {
+function SeccionPublicaciones({ user = {}, autor_id = '' }) {
   const [abrirModalPublicacion, setAbrirModalPublicacion] = useState(false);
   const userInSesion = JSON.parse(
     localStorage.getItem(`${NOMBRE_APP}-userData`)
   );
   const [page, setPage] = useState(1);
-  console.log(user);
   const {
     publicaciones,
     loading,
@@ -22,11 +21,9 @@ function SeccionPublicaciones({ user = {}, _id = '' }) {
     nextLoading,
     hayMasPublicaciones,
   } = usePublicaciones({
-    _id,
+    autor_id, // id del usuario
     page,
   });
-
-  console.log(publicaciones);
 
   return (
     <>
@@ -41,7 +38,7 @@ function SeccionPublicaciones({ user = {}, _id = '' }) {
       <main className="w-full min-w-[300px] flex flex-col gap-3 md:w-auto flex-grow ">
         {/* Menú para subir una publicación */}
 
-        {(user.uid === userInSesion.uid || _id === '') && (
+        {(user.uid === userInSesion.uid || autor_id === '') && (
           <div className="bg-white rounded-md w-full p-3 shadow-lg">
             {/* <--Boton principal--> */}
             <div className="flex gap-1">

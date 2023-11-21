@@ -4,7 +4,7 @@ import { AvatarUser } from '../react/AvatarUser';
 const bg =
   'https://img.freepik.com/vector-premium/patron-fisuras-reciclaje-separacion-basura-co2-concepto-cambio-climatico-doodle-vectorial_414360-2797.jpg';
 
-function TarjetaUsuario({ user, className = '' }) {
+function TarjetaUsuario({ user, className = '', ...props }) {
   const userInSesion = JSON.parse(
     localStorage.getItem(`${NOMBRE_APP}-userData`)
   );
@@ -24,6 +24,7 @@ function TarjetaUsuario({ user, className = '' }) {
   return (
     <section
       className={`w-full flex justify-center flex-col items-center bg-white shadow-lg rounded-md md:w-[220px] overflow-hidden flex-shrink-0 ${className}`}
+      {...props}
     >
       {/*  <!-- imagen de portada  --> */}
       <div
@@ -59,7 +60,7 @@ function TarjetaUsuario({ user, className = '' }) {
         </div>
       </div>
 
-      {user.uid === userInSesion.uid && (
+      {user?.uid === userInSesion?.uid && (
         <form onSubmit={handleSubmit} className="text-black p-2">
           <button
             className="bg-rose-600 p-1 text-sm rounded-3xl text-white"

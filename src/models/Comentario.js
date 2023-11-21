@@ -1,28 +1,49 @@
 import mongoose from 'mongoose';
 const { Schema, model, models } = mongoose;
-
+delete mongoose.connection.models['Comentario'];
 const comentarioSchema = new Schema({
-  contendio: {
-    type: String,
-    imagenes: [string],
-    videos: [string],
+  publicacion: {
+    type: Schema.Types.ObjectId,
+    ref: 'Publicacion',
+  },
+  contenido: {
+    tipo: String,
+    texto: String,
+    multimedia: [
+      {
+        url: String,
+        nombreFile: String,
+      },
+    ], // urls de los enlaces a los videos o las fotos
   },
   fechaComentario: {
     type: Date,
+    default: Date.now(),
   },
   meGustas: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Usuario',
+      autor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Usuario',
+      },
+      fecha: {
+        type: Date,
+        default: new Date(),
+      },
     },
   ],
+  cantidadMeGustas: {
+    type: Number,
+    default: 0,
+  },
   autor: {
     type: Schema.Types.ObjectId,
-    ref: 'usuario', // relación
+    ref: 'Usuario', // relación
+    required: true,
   },
   usuarioRespuesta: {
     type: Schema.Types.ObjectId,
-    ref: 'usuario',
+    ref: 'Usuario',
   },
   comentariosRespuesta: [
     {

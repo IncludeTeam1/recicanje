@@ -1,34 +1,37 @@
+import Comentario from '../../../models/Comentario';
 import Publicacion from '../../../models/Publicacion';
-import Usuario from '../../../models/Usuario';
 import { createResponse } from '../../../utils/createResponse';
 
 export const POST = async ({ request }) => {
   const data = await request.json();
-  console.log({data});
 
   try {
     let filtro = {};
     let page = data.page || 1;
     let limit = 10;
 
-    if (data._id) {
-      filtro['autor'] = data._id;
+    if (data.autor_id) {
+      filtro['autor'] = data.autor_id;
     }
 
     const publicaciones = await Publicacion.find(filtro)
-
       .sort({
-        fechaPublicacion: -1,
+        _id: -1,
       })
       .skip((page - 1) * limit) // offset
       .limit(limit)
       .populate({
         path: 'autor',
-        select: 'uid displayName photoURL portadaURL',
+        select: '_id uid displayName photoURL portadaURL',
       });
-    publicaciones.forEach((publicacion) => {
-      console.log(publicacion.autor);
-    });
+    // .populate({
+    //   path: 'comentarios',
+    //   model: Comentario,
+    //   populate: {
+    //     path: 'autor',
+    //     select: '_id uid displayName photoURL portadaURL',
+    //   }, // de esta forma traigo los autores de los comentarios. Mejor voy ha crear un endpoint que traiga los comentarios
+    // });
 
     return new Response(
       createResponse({

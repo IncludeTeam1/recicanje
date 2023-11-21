@@ -32,7 +32,7 @@ const res = await fetch(`${BASE_URL_API}/api/usuarios/obtenerUsuario`, {
 const { infoUsuario } = await res.json();
 
 const user = { ...userAuth, ...infoUsuario };
-console.log(user);
+
 if (!user) {
   return Astro.redirect('/signin');
 }

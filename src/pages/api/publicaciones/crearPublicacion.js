@@ -1,6 +1,5 @@
-import { getAuth } from 'firebase/auth';
 import dbConnect from '../../../libs/dbConnect';
-import { app } from '../../../firebase/server';
+
 import Publicacion from '../../../models/Publicacion';
 
 export const POST = async ({ request, cookies }) => {
@@ -25,6 +24,7 @@ export const POST = async ({ request, cookies }) => {
 
     const resDb = await Publicacion.create({
       ...data,
+      fechaPublicacion: Date.now(),
     });
 
     return new Response(JSON.stringify({ resDb, status: 200 }));

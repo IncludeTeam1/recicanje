@@ -160,7 +160,12 @@ const { className } = Astro.props;
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
+        body: JSON.stringify({
+          uid: userCredential.user.uid,
+        }),
       });
+
+      const { resDb } = await response.json();
 
       if (response.status === 200) {
         const userData = {
@@ -168,8 +173,9 @@ const { className } = Astro.props;
           displayName: userCredential.user.displayName,
           email: userCredential.user.email,
           photoUrl: userCredential.user.photoURL,
+          _id: resDb._id,
         };
-
+        // alert(JSON.stringify(userData));
         localStorage.setItem(
           `${NOMBRE_APP}-userData`,
           JSON.stringify(userData),

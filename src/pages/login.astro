@@ -280,16 +280,17 @@ const idsBtnAuth = {
         body: JSON.stringify({ user }),
       });
 
-      const res = await response.json();
+      const { resDb } = await response.json();
 
-      console.log(res);
       if (response.status === 200) {
         /* Guardar el usuario en sesión en el localStorage */
+
         const userData = {
           uid: userCredential.user.uid,
           displayName: userCredential.user.displayName,
           email: userCredential.user.email,
           photoUrl: userCredential.user.photoURL,
+          _id: resDb._id,
         };
 
         localStorage.setItem(
@@ -300,6 +301,7 @@ const idsBtnAuth = {
       }
     } catch (e) {
       console.log(e);
+      alert(JSON.stringify(e));
       alert(obtenerMensajeDeError(e.code));
     }
     btnRegister.textContent = 'Registrarse';
@@ -315,6 +317,7 @@ const idsBtnAuth = {
     });
   });
 
+  /* Efecto máquina de escribir */
   const containerTextToWrite = document.getElementById('texto-maquina');
   const wordsToWrite = [
     'Recicanje',
@@ -330,7 +333,7 @@ const idsBtnAuth = {
     return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
-  async function typeWrite(containerText, wordsToWrite: Array<string>) {
+  async function typeWrite(containerText: any, wordsToWrite: Array<string>) {
     let indexCurrentWord = 0;
     let currentWord = wordsToWrite[indexCurrentWord];
     let lastIndexCurrentWord = currentWord.length;

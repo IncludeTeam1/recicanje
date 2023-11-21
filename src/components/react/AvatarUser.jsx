@@ -7,7 +7,7 @@ de comentarios también de cada publicación, entonces agrego un prop que si exi
 function AvatarUser({ user, className = '' }) {
   return (
     <div
-      className={`object-cover overflow-hidden  w-10 h-10 rounded-full ${className}`}
+      className={`object-cover overflow-hidden  w-10 h-10 rounded-full flex-shrink-0 ${className}`}
     >
       <img
         className={`object-cover w-full h-full hover:scale-105 transition`}

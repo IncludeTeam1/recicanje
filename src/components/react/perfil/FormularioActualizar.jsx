@@ -6,6 +6,7 @@ import { VistaPreviaUsuario } from './VistaPreviaUsuario';
 
 import { updateMultimedia } from '../../../helpers/updateMultimedia.js';
 import { fileReader } from '../../../helpers/fileReader';
+import { NOMBRE_APP } from '../../../config.js';
 
 function FormularioActualizar({ user, setAbrirModal }) {
   function handleModal(e) {
@@ -37,7 +38,7 @@ function FormularioActualizar({ user, setAbrirModal }) {
     }
   }, [userTemp]);
 
-    useEffect(() => {
+  useEffect(() => {
     document.body.classList.add('overflow-hidden');
     document.body.classList.add('sm:overflow-auto');
   }, []);
@@ -131,6 +132,7 @@ function FormularioActualizar({ user, setAbrirModal }) {
       });
       if (res.status === 200) {
         alert('Información actualizada');
+        localStorage.setItem(`${NOMBRE_APP}.userData`, JSON.stringify(newUser));
         window.location.reload();
       }
     } catch (error) {
@@ -144,9 +146,11 @@ function FormularioActualizar({ user, setAbrirModal }) {
 
   return (
     <div className="absolute top-0 left-0 bottom-0 bg-gray-600 bg-opacity-75 w-full z-50  ">
-      <main className="w-full sm:w-11/12 max-w-[800px] h-[100vh] md:h-auto mx-auto sm:mt-20 bg-white sm:rounded-md shadow-xl p-5 flex flex-col gap-3 sticky top-0 overflow-y-scroll z-50 sm:top-5
+      <main
+        className="w-full sm:w-11/12 max-w-[800px] h-[100vh] md:h-auto mx-auto sm:mt-20 bg-white sm:rounded-md shadow-xl p-5 flex flex-col gap-3 sticky top-0 overflow-y-scroll z-50 sm:top-5
       pb-[110px] md:pb-5
-      ">
+      "
+      >
         <header className="flex items-center">
           <h2 className="text-3xl font-semibold">Editar información</h2>
 

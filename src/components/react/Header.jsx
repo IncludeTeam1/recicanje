@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 /* Iconst */
 import { HomeIcon } from '../../icons/HomeIcon';
 import { MsgIcon } from '../../icons/MsgIcon';
@@ -34,11 +34,20 @@ function Header({ user = {} }) {
     },
   ];
   const [currentUser, setCurrentUser] = useState(user);
-  useEffect(() => {
-    fetch(`/api/usuarios/obtenerUsuario`)
+
+  /*  useEffect(() => {
+    fetch(`/api/usuarios/obtenerUsuario`, {
+      method: 'POST',
+      body: JSON.stringify({
+        uid: user.uid,
+      }),
+    })
       .then((res) => res.json())
-      .then((u) => setCurrentUser(u));
-  }, []);
+      .then((u) => {
+        console.log(u);
+        setCurrentUser(u.infoUsuario);
+      });
+  }, []); */
 
   const linksAsociados = {
     'page-feed': 'Inicio',

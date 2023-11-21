@@ -32,8 +32,10 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ user }),
+        body: JSON.stringify({ user, uid: user.uid }),
       });
+
+      const { resDb } = await response.json();
 
       if (response.status === 200) {
         const userData = {
@@ -41,6 +43,7 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
           displayName: credenciales.user.displayName,
           email: credenciales.user.email,
           photoUrl: credenciales.user.photoURL,
+          _id: resDb._id,
         };
 
         localStorage.setItem(
@@ -81,15 +84,16 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
         headers: {
           Authorization: `Bearer ${idToken}`,
         },
-        body: JSON.stringify({ user }),
+        body: JSON.stringify({ user, uid: user.uid }),
       });
-
+      const { resDb } = await response.json();
       if (response.status === 200) {
         const userData = {
           uid: credenciales.user.uid,
           displayName: credenciales.user.displayName,
           email: credenciales.user.email,
           photoUrl: credenciales.user.photoURL,
+          _id: resDb._id,
         };
 
         localStorage.setItem(

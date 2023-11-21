@@ -48,3 +48,7 @@ por ahora solo usamos la autenticación con correo y contraseña.
 ### 11/11/2023
 
 - Usar siempre la información de los usuarios de **mongoDB**
+
+### 19/11/2023
+
+- Gano MILEI hp, bien estoy haciendo el timeAgo con la api nativa de JS (Intl), había cierta desincronizació, decidí instalar dayjs y seguía igual, el error era en el default del modelo.

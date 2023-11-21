@@ -13,6 +13,8 @@ import { getAuth } from 'firebase-admin/auth';
 import { Header } from '../components/react/Header';
 import { BASE_URL_API, NOMBRE_APP } from '../config';
 
+import { AuthContext } from '../context/AuthContext';
+
 const auth = getAuth(app);
 
 /* Verificar la sesión actual */
@@ -35,7 +37,7 @@ const { infoUsuario: user } = await res.json();
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Astro description" />
@@ -50,21 +52,22 @@ const { infoUsuario: user } = await res.json();
       rel="stylesheet"
     />
     <title>{title}</title>
-    <ViewTransitions />
+    <ViewTransitions fallback="none" />
   </head>
   <body
     class="bg-gradient-to-b
   min-h-screen w-full bg-slate-100 text-black flex flex-col relative"
   >
-    <Header user={user} client:only />
+    <AuthContext client:only>
+      <Header user={user} client:only />
 
-    <main
-      class="pb-[100px] sm:-pb-[100px] md:p-5
+      <main
+        class="pb-[100px] sm:-pb-[100px] md:p-5
     bg-slate-100 flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1300px]"
-    >
-      <slot />
-    </main>
-
+      >
+        <slot />
+      </main>
+    </AuthContext>
     <script></script>
 
     <!-- CSS -->
