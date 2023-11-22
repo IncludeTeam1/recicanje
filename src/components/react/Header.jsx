@@ -25,7 +25,7 @@ function Header({ user = {} }) {
     {
       icon: <MsgIcon />,
       text: 'Mensajes',
-      href: '#',
+      href: '/mensajes',
     },
     {
       icon: <AvatarUser className="w-6 h-6 md:w-8 md:h-8" user={user} />,
@@ -53,6 +53,7 @@ function Header({ user = {} }) {
     'page-feed': 'Inicio',
     'page-mi-red': 'Mi red',
     'page-mi-perfil': 'Perfil',
+    'page-mensajes': 'Mensajes',
   };
 
   const [paginaActiva, setPaginaActiva] = useState('');

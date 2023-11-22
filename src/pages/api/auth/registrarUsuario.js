@@ -1,4 +1,5 @@
 import { getAuth } from 'firebase-admin/auth';
+import { getFirestore } from 'firebase-admin/firestore';
 import { app } from '../../../firebase/server';
 import dbConnect from '../../../libs/dbConnect';
 import Usuario from '../../../models/Usuario';
@@ -7,10 +8,11 @@ import { createResponse } from '../../../utils/createResponse';
 export const POST = async ({ request, cookies }) => {
   try {
     const auth = getAuth(app);
+    const db = getFirestore(app);
 
     const body = await request.json();
     const usuarioAuth = body.user;
-    
+
     console.log(usuarioAuth);
 
     /* Obtener el token de las cabeceras de la solicitud */
@@ -45,6 +47,20 @@ export const POST = async ({ request, cookies }) => {
       path: '/',
     });
     console.log(resDb);
+
+    const resFirestore = await db
+      .collection('usuarios')
+      .doc(usuarioAuth.uid)
+      .set({
+        displayName: usuarioAuth.displayName,
+        photoURL: usuarioAuth.photoURL,
+        uid: usuarioAuth.uid,
+        correoElectronico: usuarioAuth.email,
+        fechaDeRegistro: Date.now(),
+      });
+
+    console.log({ resFirestore });
+
     return new Response(
       createResponse({
         resDb,

@@ -6,11 +6,6 @@ function SeccionComentariosPublicacion({
   publicacion,
   setCurrentPublicacion,
 }) {
-  /* Paginación */
-  const [ctComentarios, setCtComentarios] = useState(
-    publicacion.comentarios.length
-  );
-
   const [limit, setLimit] = useState(5);
   const [page, setPage] = useState(1);
 
@@ -20,7 +15,10 @@ function SeccionComentariosPublicacion({
   ); // primero guarda los _id de los comentarios, sirve para hacer un efecto skeleton, después si hace la petición y trae los comentarios
 
   const [loadingCreate, setLoadingCreate] = useState(false);
-
+  /* Paginación */
+  const [ctComentarios, setCtComentarios] = useState(
+    publicacion.comentarios.length
+  );
   const [hayMasComentarios, setHayMasComentarios] = useState(
     ctComentarios > comentarios.length
   );

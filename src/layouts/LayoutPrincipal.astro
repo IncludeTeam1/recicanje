@@ -11,6 +11,7 @@ import { getAuth } from 'firebase-admin/auth';
 
 /* Componentes */
 import { Header } from '../components/react/Header';
+import { BurbujaMensajes } from '../components/react/mensajes/BurbujaMensajes';
 import { BASE_URL_API, NOMBRE_APP } from '../config';
 
 import { AuthContext } from '../context/AuthContext';
@@ -62,10 +63,13 @@ const { infoUsuario: user } = await res.json();
       <Header user={user} client:only />
 
       <main
-        class="pb-[100px] sm:-pb-[100px] md:p-5
+        class="pb-[100px] sm:-pb-[100px] md:p-5 relative
     bg-slate-100 flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1300px]"
       >
         <slot />
+        <!-- Aqui iria el componente pequeño de los comentarios. -->
+
+        <BurbujaMensajes user={user} client:only />
       </main>
     </AuthContext>
     <script></script>

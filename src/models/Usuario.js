@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 const { Schema, model, models } = mongoose;
-delete mongoose.connection.models["Usuario"];
+delete mongoose.connection.models['Usuario'];
 const usuarioSchema = new Schema({
   uid: {
     type: String,
@@ -40,20 +40,37 @@ const usuarioSchema = new Schema({
     type: String,
   },
   // como si fueran amigos
+  // Lista de usuarios a los que se ha enviado una solicitud de conexión
+  solicitudesEnviadas: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Usuario',
+    },
+  ],
+
+  // Lista de usuarios que han enviado una solicitud de conexión
+  solicitudesRecibidas: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Usuario',
+    },
+  ],
+
+  // Lista de usuarios conectados
   usuariosConectados: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Usuario",
+      ref: 'Usuario',
     },
   ],
   publicaciones: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Publicacion",
+      ref: 'Publicacion',
     },
   ],
 });
 
-const Usuario = models.Usuario || model("Usuario", usuarioSchema);
+const Usuario = models.Usuario || model('Usuario', usuarioSchema);
 
 export default Usuario;
