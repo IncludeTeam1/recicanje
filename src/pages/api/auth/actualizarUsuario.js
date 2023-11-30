@@ -20,13 +20,13 @@ export const POST = async ({ request }) => {
         new: true,
       }
     );
-
+    console.log({ resDb });
     const usuarioRef = db.collection('usuarios').doc(data.uid);
     const resFirestore = await usuarioRef.set(
       {
         displayName: data.displayName,
         photoURL: data.photoURL,
-        portadaURL: data.portadaURL,
+        portadaURL: data.portadaURL || '',
       },
       { merge: true }
     );

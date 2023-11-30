@@ -15,7 +15,7 @@ export const POST = async ({ request }) => {
         body: { message: 'Usuario no encontrado' },
       };
     }
-
+    console.log({ usuarioSesion });
     // Obtener información completa de los usuarios en solicitudesRecibidas
     const usuariosEnSolicitudes = await Usuario.find({
       _id: { $in: usuarioSesion.solicitudesRecibidas },

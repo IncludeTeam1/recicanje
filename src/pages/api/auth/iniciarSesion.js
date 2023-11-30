@@ -2,6 +2,7 @@ import { app } from '../../../firebase/server';
 import { getAuth } from 'firebase-admin/auth';
 import Usuario from '../../../models/Usuario';
 import dbConnect from '../../../libs/dbConnect';
+import { createResponse } from '../../../utils/createResponse';
 
 export const POST = async ({ request, cookies }) => {
   const auth = getAuth(app);
@@ -18,13 +19,27 @@ export const POST = async ({ request, cookies }) => {
   try {
     dbConnect();
     await auth.verifyIdToken(idToken);
+    const [resDb] = await Usuario.find({
+      uid: uid,
+    });
+
+    if (!resDb) {
+      return new Response(
+        createResponse({
+          resDb,
+          msg: 'No se encontro este usuario',
+          error: 666,
+        }),
+        {
+          status: 400,
+        }
+      );
+    }
+
     /* Crear y establecer una cookie de sesión */
     const fiveDays = 60 * 60 * 24 * 5 * 1000;
     const sessionCookie = await auth.createSessionCookie(idToken, {
       expiresIn: fiveDays,
-    });
-    const [resDb] = await Usuario.find({
-      uid: uid,
     });
 
     /* Encontrar al usuario y traer sus datos. */
@@ -32,11 +47,12 @@ export const POST = async ({ request, cookies }) => {
     cookies.set('session', sessionCookie, {
       path: '/',
     });
-
+    console.log(resDb);
     return new Response(
-      JSON.stringify({
-        mensaje: 'Inicio de sesión correcto',
+      createResponse({
         resDb,
+        _id: resDb._id,
+        msg: 'incio correcto',
       }),
       {
         status: 200,

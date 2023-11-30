@@ -22,7 +22,6 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
       const credenciales = await signInWithPopup(auth, provider);
       const idToken = await credenciales.user.getIdToken();
 
-      console.log(credenciales.user);
       const user = {
         ...credenciales.user,
       };
@@ -35,9 +34,10 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
         body: JSON.stringify({ user, uid: user.uid }),
       });
 
-      const { resDb } = await response.json();
+      const resDb = await response.json();
+     
 
-      if (response.status === 200) {
+      if (response.status === 200 && resDb._id) {
         const userData = {
           uid: credenciales.user.uid,
           displayName: credenciales.user.displayName,
@@ -53,14 +53,18 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
 
         window.location.assign('/feed');
       }
-      const res = await response.json();
-      alert(obtenerMensajeDeError(res.error.code));
+
+      alert(obtenerMensajeDeError(resDb.error.code));
+      
     } catch (error) {
       if (error.code === 'auth/popup-closed-by-user') {
         return;
       }
+      if (error.code) {
+        alert(JSON.stringify(error));
+        alert(obtenerMensajeDeError(error.code));
+      }
       console.log(error);
-      alert(obtenerMensajeDeError(error.code));
     } finally {
       document.body.classList.remove('opacity-10');
       document.body.classList.remove('pointer-events-none');

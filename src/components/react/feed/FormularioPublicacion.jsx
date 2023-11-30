@@ -90,7 +90,7 @@ function FormularioPublicacion({ user = {}, open, setOpen, refresh }) {
 
   return (
     /* Modal */
-    <div className="absolute top-0 left-0 bottom-0 bg-gray-600 bg-opacity-75 w-full z-50  ">
+    <div className="absolute  top-0 left-0 bottom-0 right-0 bg-gray-600 bg-opacity-75 w-full z-50  ">
       <main
         className="w-full sm:w-11/12 max-w-[800px] mx-auto sm:mt-20 bg-white
       sm:rounded-md shadow-xl p-5 flex flex-col gap-3 sticky top-0   sm:top-5
@@ -139,10 +139,10 @@ function FormularioPublicacion({ user = {}, open, setOpen, refresh }) {
 
           {/*Vista previa de archivos multimedia*/}
           {urlTemp !== '' && (
-            <div className="border border-orange-800">
-              <figure className="w-full flex justify-center items-center min-h-[300px] max-h-[400px] border overflow-hidden">
+            <div className="">
+              <figure className="w-full flex justify-center items-center min-h-[300px] max-h-[400px]  overflow-hidden">
                 <img
-                  className=" h-full max-w-[200px] object-cover border border-emerald-900"
+                  className=" h-full w-full max-w-[500px] object-cover border "
                   src={urlTemp}
                   alt={`Imagen de vista previa de la publicación del usuario ${user.displayName}`}
                 />

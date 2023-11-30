@@ -1,9 +1,10 @@
 ---
 interface Props {
   title: string;
+  classNameLayout: string;
 }
 
-const { title } = Astro.props;
+const { title, classNameLayout } = Astro.props;
 import { ViewTransitions } from 'astro:transitions';
 
 import { app } from '../firebase/server';
@@ -63,8 +64,7 @@ const { infoUsuario: user } = await res.json();
       <Header user={user} client:only />
 
       <main
-        class="pb-[100px] sm:-pb-[100px] md:p-5 relative
-    bg-slate-100 flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1300px]"
+        class={`md:p-5   flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1300px] pb-[100px]  ${classNameLayout}`}
       >
         <slot />
         <!-- Aqui iria el componente pequeño de los comentarios. -->

@@ -1,21 +1,22 @@
 import { AvatarUser } from '../AvatarUser';
+import { ACCIONES_CONECTAR } from './SeccionContactos';
 const bg =
   'https://img.freepik.com/vector-premium/patron-fisuras-reciclaje-separacion-basura-co2-concepto-cambio-climatico-doodle-vectorial_414360-2797.jpg';
-function TarjetaContacto({ handleClik, usuario, type = 'sugerencia' }) {
+function TarjetaContacto({ handleClik, usuario, type = 'Sugerencia' }) {
   const contenido = {
-    sugerencia: '➕ Conectar',
-    pendiente: '🕗 Pendiente',
-    confirmar: '✅ Aceptar',
+    Sugerencia: '➕ Conectar',
+    Pendiente: '🕗 Pendiente',
+    Confirmar: '✅ Confirmar',
   };
 
   const clases = {
-    sugerencia: `border border-emerald-600 text-emerald-700
+    Sugerencia: `border border-emerald-600 text-emerald-700
     px-3 py-2 rounded-3xl  hover:text-white hover:border-white hover:bg-emerald-600 transition`,
 
-    pendiente: `border border-gray-600 
+    Pendiente: `border border-gray-600 
     px-3 py-2 rounded-3xl  text-white hover:border-white hover:bg-gray-400 bg-gray-600 transition`,
 
-    confirmar: `border border-emerald-600 text-emerald-700 bg-emerald-100 
+    Confirmar: `border border-emerald-600 text-emerald-700 bg-emerald-100 
     px-3 py-2 rounded-3xl  hover:text-white hover:border-white hover:bg-emerald-600 transition`,
   };
 

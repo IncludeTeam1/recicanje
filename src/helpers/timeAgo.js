@@ -22,9 +22,12 @@ const getDateDiffs = (dateString) => {
 };
 
 export function createTimeAgo(timestamp, style = 'short') {
-  const { unit, value } = getDateDiffs(timestamp);
-  const rtf = new Intl.RelativeTimeFormat('es', { style });
-  return rtf.format(value, unit);
+  if (timestamp) {
+    const { unit, value } = getDateDiffs(timestamp);
+    const rtf = new Intl.RelativeTimeFormat('es', { style });
+    return rtf.format(value, unit);
+  }
+  return '';
 }
 
 // import dayjs from 'dayjs';

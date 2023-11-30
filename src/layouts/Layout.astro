@@ -15,12 +15,19 @@ import { ViewTransitions } from 'astro:transitions';
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Poppins:wght@200;300;600;900&family=Righteous&display=swap"
+      rel="stylesheet"
+    />
     <title>{title}</title>
-    <ViewTransitions />
+    <ViewTransitions fallback="none" />
   </head>
   <body
     class="bg-gradient-to-b from-emerald-900 via-emerald-950 to-emerald-700
-  min-h-screen w-full text-emerald-100 flex flex-col"
+  min-h-screen w-full flex flex-col"
   >
     <slot />
     <script></script>
@@ -28,7 +35,16 @@ import { ViewTransitions } from 'astro:transitions';
     <!-- CSS -->
     <style is:global>
       body {
+        font-family: 'Poppins', sans-serif;
         overflow-x: hidden;
+      }
+      ::-webkit-scrollbar {
+        width: 2px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background-color: green;
+        border-radius: 1em;
       }
 
       input,

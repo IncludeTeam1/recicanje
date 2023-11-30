@@ -3,13 +3,13 @@ import LayoutPrincipal from '../layouts/LayoutPrincipal.astro';
 import { PaginaMensaje } from '../components/react/mensajes/PaginaMensaje';
 // import { BASE_URL_API } from "../../config";
 
-// const res = await fetch(`${BASE_URL_API}/api/usuarios/obtenerSugerencias`);
+// const res = await fetch(`${BASE_URL_API}s`);
 
 // export const prerender = false;
 ---
 
 <!-- Esta página no usa mucho JS, va a ser estatico las sugerencias se mostraran al momento de cargar la página -->
-<LayoutPrincipal title="Mi red">
+<LayoutPrincipal classNameLayout="h-[90vh] " title="Mi red">
   <div
     id="page-mensajes"
     class="flex-grow text-black w-full flex flex-col items-start md:flex-row gap-5

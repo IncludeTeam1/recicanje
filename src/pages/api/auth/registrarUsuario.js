@@ -46,8 +46,8 @@ export const POST = async ({ request, cookies }) => {
     cookies.set('session', sessionCookie, {
       path: '/',
     });
-    console.log(resDb);
 
+    /* Lo almacena en firebase */
     const resFirestore = await db
       .collection('usuarios')
       .doc(usuarioAuth.uid)
@@ -59,7 +59,12 @@ export const POST = async ({ request, cookies }) => {
         fechaDeRegistro: Date.now(),
       });
 
-    console.log({ resFirestore });
+    const resFirestoreConversaciones = await db
+      .collection('usuarioConversaciones')
+      .doc(usuarioAuth.uid)
+      .set({});
+
+    console.log({ resFirestoreConversaciones });
 
     return new Response(
       createResponse({

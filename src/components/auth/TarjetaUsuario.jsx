@@ -42,8 +42,10 @@ function TarjetaUsuario({ user, className = '', ...props }) {
       <div className="flex flex-col gap-2 w-full text-sm">
         <span className="block border-b w-full border-gray-300"></span>
         <div className="flex justify-around w-full p-2">
-          <p>Contactos</p>
-          <p>23</p>
+          <p>
+            {user?.usuariosConectados.length > 1 ? 'Contactos' : 'Contacto'}
+          </p>
+          <p>{user?.usuariosConectados.length}</p>
         </div>
 
         <span className="block border-b w-full border-gray-300"></span>

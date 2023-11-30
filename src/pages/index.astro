@@ -1,62 +1,279 @@
 ---
-interface Props {
-  title: string;
-}
-
-const { title } = Astro.props;
 import { ViewTransitions } from 'astro:transitions';
 
 import { app } from '../firebase/server';
 import { getAuth } from 'firebase-admin/auth';
-
-/* Componentes */
-import { Header } from '../components/react/Header';
 
 const auth = getAuth(app);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
 if (sessionCookie) {
   const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+  console.log(decodedCookie);
   const user = await auth.getUser(decodedCookie.uid);
   if (user) {
     return Astro.redirect('/feed');
   }
 }
+
+import mockup from '../assets/images/mockup_reci.png';
+import mockup_mobil from '../assets/images/mockup_reci_movil.png';
+import wave from '../assets/images/wave.svg';
+import { CalendarioIcon } from '../icons/CalendarioIcon';
+
+import { UsersIcon } from '../icons/UsersIcon';
+import { PhotoIcon } from '../icons/PhotoIcon';
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
+    <meta name="description" content="Red social que unifica y promueve la cultura del reciclaje." />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+P+One&family=Poppins:wght@200;300;600;900&family=Righteous&display=swap"
+      rel="stylesheet"
+    />
+
     <title>Recicanje</title>
     <ViewTransitions />
   </head>
   <body
     class="bg-gradient-to-b from-emerald-900 via-emerald-950 to-emerald-700
-  min-h-screen w-full text-emerald-100 flex flex-col"
+  min-h-screen w-full flex flex-col mx-auto"
   >
-    <main>
-      Aqui va ir la super landing page del diablo loco de Recicanje ahora que lo
-      pienso tenemos una página login en donde esta el formulario para loguearse
-      y para iniciar sesión entonces la landing redirige a esa página rarisimo
-      pvto el que lee
-
-      <a class="text-emerald-800 underline underline-offset-2" href="/login"
-        >Ir al login</a
+    <header
+      class="flex text-emerald-100 justify-center w-full mx-auto flex-col mt-10"
+    >
+      <section class="w-[90%] h-[250px] mx-auto">
+        <div class="flex flex-col justify-center items-center gap-3">
+          <h1 id="texto-maquina" class="text-3xl font-bold transition-all">
+            RECICANJE
+          </h1>
+          <p class="font-serif text-center text-xs md:text-sm lg:text-base">
+            Únete a la comunidad que fomenta el reciclaje y busca un cambio
+            cultural de verdad.
+          </p>
+          <a
+            class="py-2 px-4 rounded-md flex items-center justify-center bg-emerald-700 shadow-2xl hover:bg-white hover:text-emerald-700 transition-all font-poo"
+            href="/login">Comenzar</a
+          >
+        </div>
+        <!-- Mockups -->
+        <figure
+          class="relative flex justify-center items-center max-w-[768px] mx-auto"
+        >
+          <img
+            src={mockup.src}
+            alt="Mockup de la red social intuitiva recicanje"
+          />
+          <img
+            class="absolute w-[20%] left-0"
+            src={mockup_mobil.src}
+            alt="Mockup de la red social intuitiva recicanje en dispositivos moviles"
+          />
+        </figure>
+      </section>
+      <img class="-z-40" src={wave.src} alt="Wave" />
+    </header>
+    <!-- wave -->
+    <main
+      class="bg-white pt-[100px] sm:pt-[200px] md:pt-[180px] lg:[100px] 2xl:pt-[10px] w-full flex flex-col"
+    >
+      <!-- Sección de servicios -->
+      <section
+        class="flex max-w-[1024px] flex-col lg:flex-row gap-3 w-[90%] mx-auto"
       >
+        <div
+          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md"
+        >
+          <CalendarioIcon className="stroke-emerald-700" client:load />
+          <div class="flex flex-col gap-1">
+            <h2 class="font-bold text-emerald-700 text-lg">
+              Crear una cuenta es muy fácil
+            </h2>
+            <p>
+              Puedes crear una cuenta como en cualquier red social, inicia con
+              google o tu cuenta de facebook
+            </p>
+          </div>
+        </div>
+        <div
+          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md"
+        >
+          <UsersIcon className="stroke-emerald-700" client:load />
+          <div class="flex flex-col gap-1">
+            <h2 class="font-bold text-emerald-700 text-lg">
+              Conectate con gente de todo el país
+            </h2>
+            <p>
+              Encontraras personas con la misma voluntad que tú, dispuestos a
+              mejorar y generar un cambio cultural
+            </p>
+          </div>
+        </div>
+        <div
+          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md"
+        >
+          <PhotoIcon className="stroke-emerald-700" client:load />
+          <div class="flex flex-col gap-1">
+            <h2 class="font-bold text-emerald-700 text-lg">
+              Cuenta de empresa
+            </h2>
+            <p>
+              Encuentra empresas que tienen ofrecen los servicios que necesitas.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección de contacto -->
+
+      <h2 class="text-center mt-40 mb-5 font-bold text-3xl">
+        Dónde nació todo!
+      </h2>
+      <section class="text-emerald-950 body-font relative">
+        <div>
+          <div class="absolute inset-0">
+            <iframe
+              title="map"
+              width="100%"
+              height="100%"
+              frameborder="0"
+              marginheight="0"
+              marginwidth="0"
+              scrolling="no"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6685.3474524456815!2d-68.48151553593763!3d-33.09136739413229!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x967e42e18d0efccb%3A0x802cefb5e43893f2!2sCentro%20Universitario%20del%20Este!5e0!3m2!1ses!2sar!4v1701298334175!5m2!1ses!2sar"
+              style="filter: contrast(1.2) opacity(0.7);"></iframe>
+          </div>
+          <div class="container px-5 py-24 mx-auto flex">
+            <div
+              class="lg:w-1/3 md:w-1/2 shadow-md backdrop-blur-sm md:backdrop-blur-xl rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0 relative z-10"
+            >
+              <h2 class="text-black font-bold text-lg mb-1 title-font">
+                Contactate con nosotros
+              </h2>
+              <p class="leading-relaxed mb-5">
+                Envianos un correo por si tienes alguna sugerencia o
+                inconformidad
+              </p>
+              <div class="relative mb-4">
+                <label for="email" class="leading-7 text-sm text-emerald-900"
+                  >Email</label
+                >
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="w-full rounded border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-900 text-base outline-none py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                />
+              </div>
+              <div class="relative mb-4">
+                <label for="message" class="leading-7 text-sm text-emerald-900"
+                  >Message</label
+                >
+                <textarea
+                  id="message"
+                  name="message"
+                  class="w-full rounded border border-gray-700 focus:border-green-500 focus:ring-2 focus:ring-green-900 h-32 text-base outline-none py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                ></textarea>
+              </div>
+              <button
+                id="btn-enviar"
+                class="text-white bg-green-500 border-0 py-2 px-6 focus:outline-none hover:bg-green-600 rounded text-lg"
+                >Enviar</button
+              >
+              <p class="text-xs text-emerald-950 text-opacity-90 mt-3">
+                Ayudanos a generar un impacto positivo en la sociedad.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
-    <script></script>
+    <script>
+      /* Efecto máquina de escribir */
+      const containerTextToWrite = document.getElementById('texto-maquina');
+      const wordsToWrite = ['Recicanje', 'Reciclar', 'Reconectar'];
+
+      function wait(ms: number) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      async function typeWrite(
+        containerText: any,
+        wordsToWrite: Array<string>,
+      ) {
+        let indexCurrentWord = 0;
+        let currentWord = wordsToWrite[indexCurrentWord];
+        let lastIndexCurrentWord = currentWord.length;
+
+        let qtWords = wordsToWrite.length;
+        let isDeleting = true;
+
+        while (true) {
+          /* Borrar */
+          if (isDeleting) {
+            lastIndexCurrentWord--;
+          } else {
+            lastIndexCurrentWord++;
+          }
+          containerText.innerText = currentWord.slice(0, lastIndexCurrentWord);
+
+          // Deja la primera letra para borrar
+          if (lastIndexCurrentWord === 1 && isDeleting) {
+            // Cuando sea la ùltima palabra, le da estilos a la primeta
+            if (indexCurrentWord === qtWords - 1) {
+              containerText.classList.add('text-shadow');
+            } else {
+              containerText.classList.remove('text-shadow');
+            }
+
+            await wait(300); // medio segundo antes de escribir la palabra
+            indexCurrentWord =
+              indexCurrentWord === qtWords - 1 ? 0 : indexCurrentWord + 1; // pasa a la siguiente palabra
+            currentWord = wordsToWrite[indexCurrentWord];
+            isDeleting = false;
+          } else if (
+            lastIndexCurrentWord === currentWord.length &&
+            !isDeleting
+          ) {
+            lastIndexCurrentWord = currentWord.length;
+            isDeleting = true;
+            await wait(
+              containerText.classList.contains('text-shadow') ? 3000 : 500,
+            ); // Espera 2 segundos antes de borrar la palabra
+          }
+
+          await wait(80); // Velocidad de escritura
+        }
+      }
+
+      typeWrite(containerTextToWrite, wordsToWrite);
+    </script>
 
     <!-- CSS -->
     <style>
       body {
+        font-family: 'Poppins', sans-serif;
         overflow-x: hidden;
       }
+      ::-webkit-scrollbar {
+        width: 2px;
+      }
 
+      ::-webkit-scrollbar-thumb {
+        background-color: green;
+        border-radius: 1em;
+      }
       input,
       input:focus {
         outline: none;
@@ -67,6 +284,11 @@ if (sessionCookie) {
       }
       button:hover {
         transform: scale(0.96);
+      }
+      .text-shadow {
+        transform: translateY(-0.5em) scale(1.25);
+        letter-spacing: 2px;
+        filter: brightness(1.25);
       }
     </style>
   </body>
