@@ -15,8 +15,6 @@ import { Header } from '../components/react/Header';
 import { BurbujaMensajes } from '../components/react/mensajes/BurbujaMensajes';
 import { BASE_URL_API, NOMBRE_APP } from '../config';
 
-import { AuthContext } from '../context/AuthContext';
-
 const auth = getAuth(app);
 
 /* Verificar la sesión actual */
@@ -36,6 +34,7 @@ const res = await fetch(`${BASE_URL_API}/api/usuarios/obtenerUsuario`, {
   body: JSON.stringify({ uid: userAuth.uid }),
 });
 const { infoUsuario: user } = await res.json();
+import { Toaster } from 'sonner';
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
@@ -60,18 +59,17 @@ const { infoUsuario: user } = await res.json();
     class="bg-gradient-to-b
   min-h-screen w-full bg-slate-100 text-black flex flex-col relative"
   >
-    <AuthContext client:only>
-      <Header user={user} client:only />
+    <Header user={user} client:only />
 
-      <main
-        class={`md:p-5   flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1300px] pb-[100px]  ${classNameLayout}`}
-      >
-        <slot />
-        <!-- Aqui iria el componente pequeño de los comentarios. -->
+    <main
+      class={`md:p-5   flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1300px] pb-[100px]  ${classNameLayout}`}
+    >
+      <slot />
+      <!-- Aqui iria el componente pequeño de los comentarios. -->
+      <BurbujaMensajes user={user} client:only />
+    </main>
 
-        <BurbujaMensajes user={user} client:only />
-      </main>
-    </AuthContext>
+    <Toaster closeButton position="top-right" client:only />
     <script></script>
 
     <!-- CSS -->

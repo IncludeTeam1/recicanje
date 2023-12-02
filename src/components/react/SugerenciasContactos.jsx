@@ -61,9 +61,9 @@ function SugerenciasContactos({ user = {}, limit = 4 }) {
         <p className="text-center grid animate-pulse place-content-center w-full min-h-[100px]">
           Cargando...
         </p>
-      ) : sugerencias.length < 1 ? (
+      ) : sugerencias?.length < 1 ? (
         <div className="p-2">
-          <p className="text-xl text-center">No hay personas</p>
+          <p className=" text-center">No hay personas</p>
         </div>
       ) : (
         <div className="flex flex-col  w-full gap-3 ">

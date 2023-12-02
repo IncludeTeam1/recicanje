@@ -7,6 +7,7 @@ import { VistaPreviaUsuario } from './VistaPreviaUsuario';
 import { updateMultimedia } from '../../../helpers/updateMultimedia.js';
 import { fileReader } from '../../../helpers/fileReader';
 import { NOMBRE_APP } from '../../../config.js';
+import { toast } from 'sonner';
 
 function FormularioActualizar({ user, setAbrirModal }) {
   function handleModal(e) {
@@ -122,7 +123,6 @@ function FormularioActualizar({ user, setAbrirModal }) {
         });
         newUser['portadaURL'] = urlMultimedia;
       }
-      console.log({ newUser });
 
       const res = await fetch('/api/auth/actualizarUsuario', {
         method: 'POST',
@@ -131,13 +131,13 @@ function FormularioActualizar({ user, setAbrirModal }) {
         }),
       });
       if (res.status === 200) {
-        alert('Información actualizada');
+        toast.success('Información actualizada');
         localStorage.setItem(`${NOMBRE_APP}.userData`, JSON.stringify(newUser));
         window.location.reload();
       }
     } catch (error) {
       console.log(error);
-      alert('Ha ocurrido un error al actualizar la información');
+      toast.error('Ha ocurrido un error al actualizar la información');
     } finally {
       setUploadingFile(false);
       setAbrirModal(false);

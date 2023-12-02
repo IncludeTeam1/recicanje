@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { NOMBRE_APP } from '../../../config';
 import { AvatarUser } from '../AvatarUser';
+import '../../../css/loaders.css';
+
+import imgSinMensaje from '../../../assets/images/sin_mensajes.svg';
+import { SinMensajes } from '../mensajes/SinMensajes';
 
 function SeccionContactosConectados() {
   const userInSesion = JSON.parse(
@@ -19,21 +23,35 @@ function SeccionContactosConectados() {
       }),
     })
       .then((res) => res.json())
-      .then((data) => setUsuariosConectados(data.usuarios))
+      .then((data) => {
+        console.log(data.usuarios);
+        setUsuariosConectados(data.usuarios);
+      })
       .catch((e) => console.log(e))
       .finally(() => {
         setLoading(false);
       });
   }, []);
-
   return (
-    <div className="border w-full p-5 flex shadow-md flex-col  gap-3">
+    <div className=" w-full p-5 flex shadow-md flex-col  gap-3">
       {loading ? (
-        <p className="text-center text-xl p-10 w-full font-semibold">
-          Trayendo panas
+        <p className="text-center text-xl p-10 w-full flex justify-center relative ">
+          <div className="loader bouncy">
+            <div className="cube">
+              <div className="cube__inner"></div>
+            </div>
+            <div className="cube">
+              <div className="cube__inner"></div>
+            </div>
+            <div className="cube">
+              <div className="cube__inner"></div>
+            </div>
+          </div>
         </p>
-      ) : usuariosConectados === null ? (
-        'No tienes contactos aún'
+      ) : usuariosConectados === null || usuariosConectados.length === 0 ? (
+        <div className="flex justify-center flex-col items-center">
+          <SinMensajes title="No tienes contactos" />
+        </div>
       ) : (
         usuariosConectados.map((usuario) => {
           return (
@@ -51,9 +69,12 @@ function SeccionContactosConectados() {
                 </span>
               </a>
 
-              <button className="truncate text-xs sm:text-base border py-1 px-2 rounded-lg border-teal-700 text-teal-700 hover:bg-teal-600 hover:outline-teal-600 hover:text-white transition-all">
+              <a
+                href="/mensajes"
+                className=" flex items-center text-xs sm:text-base border py-1 px-2 rounded-lg border-teal-700 text-teal-700 hover:bg-teal-600 hover:outline-teal-600 hover:text-white transition-all truncate"
+              >
                 Enviar mensaje
-              </button>
+              </a>
             </div>
           );
         })

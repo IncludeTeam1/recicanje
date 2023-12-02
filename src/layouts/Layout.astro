@@ -5,6 +5,8 @@ interface Props {
 
 const { title } = Astro.props;
 import { ViewTransitions } from 'astro:transitions';
+
+import { Toaster } from 'sonner';
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
@@ -30,6 +32,7 @@ import { ViewTransitions } from 'astro:transitions';
   min-h-screen w-full flex flex-col"
   >
     <slot />
+    <Toaster position="top-center" closeButton client:only />
     <script></script>
 
     <!-- CSS -->

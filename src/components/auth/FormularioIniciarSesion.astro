@@ -93,7 +93,7 @@ const { className } = Astro.props;
   import { app } from '../../firebase/client';
   import { obtenerMensajeDeError } from '../../constants/firebase/errores';
   import { BASE_URL_API, NOMBRE_APP } from '../../config';
-
+  import { toast } from 'sonner';
   const auth = getAuth(app);
 
   /* <--------Manipulación del modal------> */
@@ -186,7 +186,7 @@ const { className } = Astro.props;
     } catch (error) {
       alert(JSON.stringify(error));
       const mensaje = obtenerMensajeDeError(error.code);
-      alert(mensaje);
+      toast.error(mensaje);
     }
     btnIniciar.textContent = 'ingresar';
     btnIniciar.classList.remove('opacity-50');

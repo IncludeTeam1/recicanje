@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 const { Schema, model, models } = mongoose;
-delete mongoose.connection.models['Comentario'];
 const comentarioSchema = new Schema({
   publicacion: {
     type: Schema.Types.ObjectId,

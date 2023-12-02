@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'sonner';
 
 export function usePublicaciones({ autor_id = '', page = 1 }) {
   const [publicaciones, setPublicaciones] = useState([]);
@@ -27,7 +28,7 @@ export function usePublicaciones({ autor_id = '', page = 1 }) {
       setPublicaciones(data.publicaciones);
     } catch (error) {
       console.log(error);
-      alert('Ha ocurrido un error');
+      toast.error('Ha ocurrido un error');
     }
 
     setLoading(false);
@@ -54,7 +55,7 @@ export function usePublicaciones({ autor_id = '', page = 1 }) {
       });
     } catch (error) {
       console.log(error);
-      alert('Ha ocurrido un error');
+      toast.error('Ha ocurrido un error');
     }
 
     setNextLoading(false);

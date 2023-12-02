@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 const { Schema, model, models } = mongoose;
-delete mongoose.connection.models['Publicacion'];
 const publicacionSchema = new Schema({
   autor: {
     type: mongoose.Schema.Types.ObjectId,

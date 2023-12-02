@@ -5,6 +5,7 @@ import { AvatarUser } from '../../react/AvatarUser';
 import { BotonAccion } from '../BotonAccion';
 import { ReciclarIcon } from '../../../icons/ReciclarIcon';
 import { SeccionComentariosRespuesta } from './seccionComentariosRespuesta';
+import { toast } from 'sonner';
 
 function TarjetaComentario({
   comentario,
@@ -70,7 +71,7 @@ function TarjetaComentario({
       }
     } catch (error) {
       console.log(error);
-      alert('Ha ocurrido un error');
+      toast.error('Ha ocurrido un error');
     }
   }
 
@@ -94,7 +95,7 @@ function TarjetaComentario({
   /* Crear comentario resputesta, solo se debe añadir al comentario principal no ir anidando comentarios */
   async function createReply() {
     if (contenidoText.trim().length === 0) {
-      return alert('No se puede enviar un comentario vacio');
+      return toast.error('No se puede enviar un comentario vacio');
     }
     try {
       // setLoadingCreate(true);
@@ -120,7 +121,6 @@ function TarjetaComentario({
 
       const resData = await res.json();
       if (res.status === 200) {
-        console.log(resData);
         setContenidoText('');
         setOpenReply(false);
         inputRef.current.textContent = '';
@@ -135,22 +135,11 @@ function TarjetaComentario({
       }
     } catch (error) {
       console.log(error);
-      alert('Ha ocurrido un error');
+      toast.error('Ha ocurrido un error');
     } finally {
       // setLoadingCreate(false);
     }
   }
-
-  /*   useEffect(() => {
-    if (inputRef.current) {
-      console.log(inputRef);
-      const contenido = `<a className="
-      cursor-pointer
-      text-sky-600 hover:underline" >${usuarioAResponder.displayName}</a>`;
-      inputRef.current.innerHTML = contenido;
-      setContenidoText(contenido);
-    }
-  }, [usuarioAResponder]); */
 
   return (
     <>

@@ -23,12 +23,14 @@ export const POST = async ({ request, cookies }) => {
       uid: uid,
     });
 
+    console.log({ resDb });
+
     if (!resDb) {
       return new Response(
         createResponse({
           resDb,
           msg: 'No se encontro este usuario',
-          error: 666,
+          error: 'usuario_no_encontrado/404',
         }),
         {
           status: 400,

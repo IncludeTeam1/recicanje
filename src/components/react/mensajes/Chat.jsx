@@ -1,88 +1,20 @@
 import { useEffect, useState, useRef } from 'react';
 import { db } from '../../../firebase/client';
-import { NOMBRE_APP } from '../../../config';
-import {
-  doc,
-  onSnapshot,
-  getDoc,
-  updateDoc,
-  arrayUnion,
-} from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { getUsuarioDocument } from '../../../helpers/getUsuarioDocumento';
-import { AvatarUser } from '../AvatarUser';
-import { createTimeAgo } from '../../../helpers/timeAgo';
+
 import { BotonAccion } from '../BotonAccion';
 import { FlechaIcon } from '../../../icons/FlechaIcon';
+import { InputChat } from './InputChat';
+import { MensajeChat } from './MensajeChat';
 
-function Chat({ chat = null, setChatSeleccionado }) {
-  const usuarioInSesion = JSON.parse(
-    localStorage.getItem(`${NOMBRE_APP}-userData`)
-  );
+import '../../../css/loaders.css';
 
+function Chat({ chat = null, setChatSeleccionado, isMovil }) {
   const [mensajes, setMensajes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [contenidoText, setContenidoText] = useState('');
-  const [loadingEnvio, setLoadingEnvio] = useState(false)
 
   const [usuarioDestino, setUsuarioDestino] = useState(null);
-
-  const inputRef = useRef();
-  function manejarInput(e) {
-    setContenidoText(e.target.value);
-  }
-
-  async function handleSubmit() {
-    if (!contenidoText.trim()) return alert('Ingresa un mensaje valido...');
-    const mensaje = {
-      text: contenidoText,
-      fecha: Date.now(),
-    };
-
-    try {
-      /* Actualizar la colección conversaciones y añadir los mensajes */
-      await updateDoc(doc(db, 'conversaciones', chat.uidCombinado), {
-        messages: arrayUnion({
-          contenido: {
-            texto: contenidoText,
-          },
-          fecha: Date.now(),
-          autor: usuarioInSesion.uid,
-        }),
-      });
-
-      /* Acutalizar en usuario destino */
-      await updateDoc(
-        doc(db, 'usuarioConversaciones', usuarioDestino.uid),
-        {
-          [chat.uidCombinado]: {
-            uidCombinado: chat.uidCombinado,
-            uidOtroUsuario: usuarioInSesion.uid,
-            uidEmite: usuarioInSesion.uid,
-            ultimoMensaje: mensaje,
-          },
-        },
-        { merge: true }
-      );
-
-      // Actualizar el usuario en sesion
-      await updateDoc(
-        doc(db, 'usuarioConversaciones', usuarioInSesion.uid),
-        {
-          [chat.uidCombinado]: {
-            uidCombinado: chat.uidCombinado,
-            uidOtroUsuario: usuarioDestino.uid,
-            uidEmite: usuarioInSesion.uid,
-            ultimoMensaje: mensaje,
-          },
-        },
-        { merge: true }
-      );
-      setContenidoText('');
-      inputRef.current.target.value = '';
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
   useEffect(() => {
     setUsuarioDestino(chat?.usuario);
@@ -94,7 +26,6 @@ function Chat({ chat = null, setChatSeleccionado }) {
         (snapshot) => {
           const data = snapshot.data();
           if (data) {
-            console.log(data);
             const mensajes = data.messages.map(async (msg) => {
               const participante = await getUsuarioDocument(msg.autor); // hago al usuario de la colección usuarios con el uid
               return {
@@ -142,123 +73,41 @@ function Chat({ chat = null, setChatSeleccionado }) {
             >
               {chat?.usuario?.displayName}
             </a>
-            <BotonAccion
-              onClick={() => {
-                setChatSeleccionado(null);
-              }}
-            >
-              <FlechaIcon className="rotate-90" />
-            </BotonAccion>
+            {isMovil && (
+              <BotonAccion
+                onClick={() => {
+                  setChatSeleccionado(null);
+                }}
+              >
+                <FlechaIcon className="rotate-90" />
+              </BotonAccion>
+            )}
           </div>
           <div className="h-full flex flex-col gap-3">
             {loading ? (
-              <div className="text-center text-xl">
-                <p className="bg-gradient-to-t from-emerald-600 text-transparent bg-clip-text font-semibold animate-pulse">
-                  Trayendo mensajes
-                </p>
+              <div className="flex justify-center items-start mt-5">
+                <div className="container dot_wave">
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                  <div className="dot"></div>
+                </div>
               </div>
             ) : mensajes.length > 0 ? (
               <div className="flex flex-col gap-1 overflow-y-auto max-h-[600px]">
                 {mensajes.map((msg) => {
                   if (msg) {
-                    return (
-                      <div
-                        className={`flex border p-1 justify-between gap-2 ${
-                          msg.autor.uid === usuarioInSesion.uid
-                            ? 'flex-row-reverse'
-                            : 'bg-emerald-100'
-                        } `}
-                        key={msg.fecha}
-                      >
-                        <div
-                          className={`flex gap-1 ${
-                            msg.autor.uid === usuarioInSesion.uid
-                              ? 'flex-row-reverse'
-                              : ''
-                          }`}
-                        >
-                          <AvatarUser user={msg.autor} />
-                          <p className="whitespace-break-spaces text-sm">
-                            {msg.contenido.texto}
-                          </p>
-                        </div>
-
-                        <span className="text-[10px] whitespace-nowrap ">
-                          {createTimeAgo(msg?.fecha)
-                            ?.split(' ')
-                            ?.slice(1)
-                            ?.join(' ')}
-                        </span>
-                      </div>
-                    );
+                    return <MensajeChat msg={msg} />;
                   }
                 })}
               </div>
             ) : (
               <p>No hay mensajes</p>
             )}
-
-            {/*    {mensajes.length > 0 ? (
-              <div className="flex flex-col gap-1 overflow-y-auto max-h-[600px]">
-                {mensajes.map((msg) => {
-                  if (msg) {
-                    return (
-                      <div
-                        className={`flex border p-1 justify-between gap-2 ${
-                          msg.autor.uid === usuarioInSesion.uid
-                            ? 'flex-row-reverse'
-                            : 'bg-emerald-100'
-                        } `}
-                        key={msg.fecha}
-                      >
-                        <div
-                          className={`flex gap-1 ${
-                            msg.autor.uid === usuarioInSesion.uid
-                              ? 'flex-row-reverse'
-                              : ''
-                          }`}
-                        >
-                          <AvatarUser user={msg.autor} />
-                          <p className="whitespace-break-spaces text-sm">
-                            {msg.contenido.texto}
-                          </p>
-                        </div>
-
-                        <span className="text-[10px] whitespace-nowrap ">
-                          {createTimeAgo(msg?.fecha)
-                            ?.split(' ')
-                            ?.slice(1)
-                            ?.join(' ')}
-                        </span>
-                      </div>
-                    );
-                  }
-                })}
-              </div>
-            ) : (
-              <p>No hay mensajes</p>
-            )} */}
           </div>
 
-          <div className="mt-3 flex flex-col md:flex-row  gap-2">
-            <textarea
-              ref={inputRef}
-              value={contenidoText}
-              type="text"
-              placeholder="Envia un mensaje"
-              className="block min-h-28  max-h-36 outline-none border resize-none
-             py-4 px-2  w-full
-            "
-              onChange={manejarInput}
-            />
-            <button
-              onClick={handleSubmit}
-              className="border p-1 bg-teal-700 w-10/12 md:w-auto mx-auto md:mx-0 rounded-lg  text-white"
-            >
-              {' '}
-              Enviar{' '}
-            </button>
-          </div>
+          {/* Input para escribir el mensaje */}
+          <InputChat chat={chat} usuarioDestino={usuarioDestino} />
         </div>
       )}
     </main>

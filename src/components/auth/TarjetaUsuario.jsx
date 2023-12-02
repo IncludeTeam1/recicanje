@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { NOMBRE_APP } from '../../config';
 import { AvatarUser } from '../react/AvatarUser';
 
@@ -16,7 +17,7 @@ function TarjetaUsuario({ user, className = '', ...props }) {
 
     if (res.status === 200) {
       localStorage.removeItem(`${NOMBRE_APP}-userData`);
-      alert('Sesión cerrada');
+      toast.success('Sesión cerrada');
       window.location.assign('/login');
     }
   }

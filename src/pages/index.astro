@@ -29,7 +29,10 @@ import { PhotoIcon } from '../icons/PhotoIcon';
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Red social que unifica y promueve la cultura del reciclaje." />
+    <meta
+      name="description"
+      content="Red social que unifica y promueve la cultura del reciclaje."
+    />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
@@ -61,7 +64,7 @@ import { PhotoIcon } from '../icons/PhotoIcon';
             cultural de verdad.
           </p>
           <a
-            class="py-2 px-4 rounded-md flex items-center justify-center bg-emerald-700 shadow-2xl hover:bg-white hover:text-emerald-700 transition-all font-poo"
+            class="py-2 px-4 rounded-md flex items-center justify-center bg-emerald-700 shadow-2xl hover:bg-white hover:text-emerald-700 transition-all"
             href="/login">Comenzar</a
           >
         </div>
@@ -88,10 +91,10 @@ import { PhotoIcon } from '../icons/PhotoIcon';
     >
       <!-- Sección de servicios -->
       <section
-        class="flex max-w-[1024px] flex-col lg:flex-row gap-3 w-[90%] mx-auto"
+        class="flex max-w-[1048px] flex-col lg:flex-row gap-3 w-[90%] mx-auto"
       >
         <div
-          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md"
+          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md flex-1"
         >
           <CalendarioIcon className="stroke-emerald-700" client:load />
           <div class="flex flex-col gap-1">
@@ -104,8 +107,9 @@ import { PhotoIcon } from '../icons/PhotoIcon';
             </p>
           </div>
         </div>
+
         <div
-          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md"
+          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md flex-1"
         >
           <UsersIcon className="stroke-emerald-700" client:load />
           <div class="flex flex-col gap-1">
@@ -118,8 +122,9 @@ import { PhotoIcon } from '../icons/PhotoIcon';
             </p>
           </div>
         </div>
+
         <div
-          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md"
+          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md flex-1"
         >
           <PhotoIcon className="stroke-emerald-700" client:load />
           <div class="flex flex-col gap-1">

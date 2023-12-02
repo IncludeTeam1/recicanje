@@ -30,6 +30,24 @@ export const POST = async ({ request, cookies }) => {
       expiresIn: fiveDays,
     });
 
+    /* Si el usuario ya existe entonces que lo devuleva y que haga como que se loguea, pero que no lo cree más de una vez. */
+    const usuarioExiste = await Usuario.findOne({ uid: usuarioAuth.uid });
+    console.log({ usuarioExiste });
+    if (usuarioExiste) {
+      cookies.set('session', sessionCookie, {
+        path: '/',
+      });
+      return new Response(
+        createResponse({
+          resDb: usuarioExiste,
+          msg: 'El usuario ya existe',
+        }),
+        {
+          status: 200,
+        }
+      );
+    }
+
     /* Crear el usuario y almacenarlo en la base de datos. */
     const resDb = await Usuario.create({
       uid: usuarioAuth.uid,
@@ -63,8 +81,6 @@ export const POST = async ({ request, cookies }) => {
       .collection('usuarioConversaciones')
       .doc(usuarioAuth.uid)
       .set({});
-
-    console.log({ resFirestoreConversaciones });
 
     return new Response(
       createResponse({

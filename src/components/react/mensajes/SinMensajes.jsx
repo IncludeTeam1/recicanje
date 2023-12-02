@@ -1,6 +1,6 @@
 import sin_mensajes from '../../../assets/images/sin_mensajes.svg';
 
-function SinMensajes() {
+function SinMensajes({ title = 'Aún no tienes mensajes' }) {
   return (
     <div className="flex justify-center items-center flex-col gap-3 p-2">
       <div className="flex justify-center items-center flex-col gap-1">
@@ -8,7 +8,7 @@ function SinMensajes() {
           src={sin_mensajes.src}
           alt={`Imagen que ilustra que el usuario no tiene mensajes`}
         />
-        <p className="text-xl">Aún no tienes mensajes</p>
+        <p className="text-xl">{title}</p>
       </div>
       <p className="text-center">
         Busca contactos con los que puedas intercambiar ideas y poder conseguir

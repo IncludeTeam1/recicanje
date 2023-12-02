@@ -4,6 +4,7 @@ import { NOMBRE_APP } from '../../../config.js';
 import { BotonAccion } from '../BotonAccion.jsx';
 import { TarjetaContacto } from './TarjetaContacto.jsx';
 import { ReciclarIcon } from '../../../icons/ReciclarIcon.jsx';
+import { toast } from 'sonner';
 
 export const ACCIONES_CONECTAR = {
   pendiente: 'Pendiente',
@@ -67,7 +68,8 @@ function SeccionContactos() {
 
     const resData = await res.json();
     setSeccionActiva(ACCIONES_CONECTAR.pendiente);
-    console.log(resData);
+
+    toast.success(resData.msg);
   }
 
   /* Cuando el usuario quiere cancelar la solicitud que ha enviado */
@@ -82,7 +84,7 @@ function SeccionContactos() {
 
     const resData = await res.json();
     setSeccionActiva(ACCIONES_CONECTAR.sugerencia);
-    console.log(resData);
+    toast.success(resData.msg);
   }
 
   /* Cuando quiere confirmar la solicitud, crear la conexión y mostrar chat. */
@@ -96,8 +98,9 @@ function SeccionContactos() {
     });
 
     const resData = await res.json();
-    setSeccionActiva(ACCIONES_CONECTAR.sugerencia);
     console.log(resData);
+    toast.success(resData.msg);
+    setSeccionActiva(ACCIONES_CONECTAR.sugerencia);
   }
 
   return (

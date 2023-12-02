@@ -18,17 +18,16 @@ function HeaderUsuario({ infoUsuario }) {
     localStorage.getItem(`${NOMBRE_APP}-userData`)
   );
   /* Verificar si el usuario esta en su propio perfil. */
-  const proprioPerfil = infoUsuario?.uid === infoUsuarioSesion?.uid;
-
-  /* Verificar si se le ha mandado solicitud, o sí el otro usuario al usuario en sesión o si ya se le envia un mensaje, tener en cuenta que es al reves no estoy viendo los datos del usuario en sesión,
-  si no los del usario al que se le vistia la página */
-  const { solicitudesEnviadas } = infoUsuario;
-  const { solicitudesRecibidas } = infoUsuario;
-  const { usuariosConectados } = infoUsuario;
 
   const [accion, setAccion] = useState();
 
+  const proprioPerfil = infoUsuario?.uid === infoUsuarioSesion?.uid;
   useEffect(() => {
+    /* Verificar si se le ha mandado solicitud, o sí el otro usuario al usuario en sesión o si ya se le envia un mensaje, tener en cuenta que es al reves no estoy viendo los datos del usuario en sesión,
+    si no los del usario al que se le vistia la página */
+    const { solicitudesEnviadas } = infoUsuario;
+    const { solicitudesRecibidas } = infoUsuario;
+    const { usuariosConectados } = infoUsuario;
     if (usuariosConectados.length > 0) {
       const enviarMensaje = usuariosConectados.some(
         (_id) => _id === infoUsuarioSesion._id
@@ -59,7 +58,7 @@ function HeaderUsuario({ infoUsuario }) {
     }
 
     setAccion('Sugerencia');
-  }, []);
+  }, [infoUsuario]);
 
   const contenido = {
     Sugerencia: '➕ Conectar',

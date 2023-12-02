@@ -3,6 +3,7 @@ import { NOMBRE_APP } from '../../../config';
 import { AvatarUser } from '../AvatarUser';
 import { BotonAccion } from '../BotonAccion';
 import { createTimeAgo } from '../../../helpers/timeAgo';
+import { toast } from 'sonner';
 
 function HeaderPublicacion({ refresh, publicacion }) {
   const usuarioSesion = JSON.parse(
@@ -26,26 +27,34 @@ function HeaderPublicacion({ refresh, publicacion }) {
   }, []); */
   /* Eliminar publicacion */
   async function handleDeletePublicacion(e) {
-    const conf = confirm('Seguro desea eliminar esta publicación?');
-    if (conf) {
-      try {
-        const res = await fetch(`/api/publicaciones/eliminarPublicacion`, {
-          method: 'DELETE',
-          body: JSON.stringify({
-            idPublicacion: publicacion._id,
-          }),
-        });
-        if (res.status === 200) {
-          alert('Publicación elimnada correctamente');
-          refresh();
-        } else {
-          alert('No se ha podido eliminar la publicación');
-        }
-      } catch (error) {
-        console.log(error);
-        alert('No se ha podido eliminar la publicación');
-      }
-    }
+    // const conf = confirm('Seguro desea eliminar esta publicación?');
+    toast('¿Seguro/a que quiere eliminar esta publicación?', {
+      action: {
+        label: 'Si, última palabra',
+        onClick: async () => {
+          try {
+            const res = await fetch(`/api/publicaciones/eliminarPublicacion`, {
+              method: 'DELETE',
+              body: JSON.stringify({
+                idPublicacion: publicacion._id,
+              }),
+            });
+            if (res.status === 200) {
+              toast.success('Publicación elimnada correctamente');
+              refresh();
+            } else {
+              toast.error('No se ha podido eliminar la publicación');
+            }
+          } catch (error) {
+            console.log(error);
+            toast.error('No se ha podido eliminar la publicación');
+          }
+        },
+      },
+      actionButtonStyle: {
+        backgroundColor: 'crimson',
+      },
+    });
   }
 
   return (

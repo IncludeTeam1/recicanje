@@ -9,6 +9,7 @@ import { getAuth } from 'firebase/auth';
 import { GoogleIcon } from '../../icons/GoogleIcon';
 import { FacebookIcon } from '../../icons/FacebookIcon';
 import { NOMBRE_APP } from '../../config';
+import { toast } from 'sonner';
 
 function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
   const auth = getAuth(app);
@@ -34,16 +35,15 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
         body: JSON.stringify({ user, uid: user.uid }),
       });
 
-      const resDb = await response.json();
-     
-
+      const { resDb, error } = await response.json();
+      console.log({ resDb });
       if (response.status === 200 && resDb._id) {
         const userData = {
           uid: credenciales.user.uid,
           displayName: credenciales.user.displayName,
           email: credenciales.user.email,
           photoUrl: credenciales.user.photoURL,
-          _id: resDb._id,
+          _id: resDb._id.toString(),
         };
 
         localStorage.setItem(
@@ -53,18 +53,28 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
 
         window.location.assign('/feed');
       }
-
-      alert(obtenerMensajeDeError(resDb.error.code));
-      
+      if (error) {
+        console.log(error);
+        return toast.error(obtenerMensajeDeError(error), {
+          position: 'top-center',
+          className: 'bg-rose-600 text-rose-900',
+        });
+      }
     } catch (error) {
       if (error.code === 'auth/popup-closed-by-user') {
         return;
       }
       if (error.code) {
-        alert(JSON.stringify(error));
-        alert(obtenerMensajeDeError(error.code));
+        if (
+          obtenerMensajeDeError(error.code) === 'Ocurrio un error desconocido'
+        ) {
+          alert(JSON.stringify(error));
+        }
+        toast.error(obtenerMensajeDeError(error), {
+          position: 'top-center',
+          className: 'bg-rose-600 text-rose-900',
+        });
       }
-      console.log(error);
     } finally {
       document.body.classList.remove('opacity-10');
       document.body.classList.remove('pointer-events-none');

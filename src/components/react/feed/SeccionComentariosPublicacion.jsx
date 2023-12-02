@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { TarjetaComentario } from './TarjetaComentario';
+import { toast } from 'sonner';
 function SeccionComentariosPublicacion({
   user,
   publicacion,
@@ -32,7 +33,7 @@ function SeccionComentariosPublicacion({
   /* Crear comentario */
   async function handleCreateComment(e) {
     if (contenidoText.trim().length === 0) {
-      return alert('No se puede enviar un comentario vacio');
+      return toast.error('No se puede enviar un comentario vacio');
     }
     try {
       setLoadingCreate(true);
@@ -60,7 +61,7 @@ function SeccionComentariosPublicacion({
       }
     } catch (error) {
       console.log(error);
-      alert('Ha ocurrido un error');
+      toast.error('Ha ocurrido un error');
     } finally {
       setLoadingCreate(false);
     }

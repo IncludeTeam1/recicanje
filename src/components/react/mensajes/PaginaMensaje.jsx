@@ -3,10 +3,12 @@ import { SinMensajes } from './SinMensajes';
 import { db } from '../../../firebase/client';
 import { doc, onSnapshot, getDoc } from 'firebase/firestore';
 import { NOMBRE_APP } from '../../../config';
-import { AvatarUser } from '../AvatarUser';
-import { createTimeAgo } from '../../../helpers/timeAgo';
+
 import { Chat } from './Chat';
 import { getUsuarioDocument } from '../../../helpers/getUsuarioDocumento';
+import { AsideChat } from './AsideChat';
+
+import '../../../css/loaders.css';
 
 function PaginaMensaje() {
   const [conversaciones, setConversaciones] = useState([]);
@@ -23,19 +25,20 @@ function PaginaMensaje() {
     const unSub = onSnapshot(
       doc(db, 'usuarioConversaciones', usuarioinSesion.uid),
       (snapshot) => {
-        const data = snapshot.data();
+        const data = snapshot.data(); // las conversaciones del usuario
 
         if (data) {
           const conversaciones = Object.values(data);
-          console.log({ conversaciones });
+
           const usuariosEnConversaciones = conversaciones.map(
             async (conversacion) => {
               const usuarioDoc = await getUsuarioDocument(
+                // traer los datos del usuario. (displayName, UID, photoURL)
                 conversacion.uidOtroUsuario
               );
               return {
                 ...conversacion,
-                usuario: usuarioDoc.data(),
+                usuario: usuarioDoc.data(), // quieta el uidUsuario y le da los datos
               };
             }
           );
@@ -43,8 +46,11 @@ function PaginaMensaje() {
           // Actualizar el estado con la información de los usuarios en conversaciones
           Promise.all(usuariosEnConversaciones)
             .then((usuarios) => {
+              const conversacionesOrdenadas = usuarios.sort(
+                (a, b) => b.ultimoMensaje.fecha - a.ultimoMensaje.fecha
+              );
               setLoading(false);
-              setConversaciones(usuarios);
+              setConversaciones(conversacionesOrdenadas);
             })
             .catch((e) => console.log(e))
             .finally(() => setLoading(false));
@@ -64,7 +70,6 @@ function PaginaMensaje() {
 
   useEffect(() => {
     const handleResize = () => {
-      console.log(window.innerWidth);
       setAnchoVentana(window.innerWidth);
     };
     // Agregar un event listener para el cambio de tamaño de la ventana
@@ -77,6 +82,7 @@ function PaginaMensaje() {
   }, []);
 
   function handleChat(chat) {
+    console.log({ chat });
     setChatSeleccionado(chat);
   }
 
@@ -90,54 +96,38 @@ function PaginaMensaje() {
 
         <section className="min-h-[500px] h-[100%] bg-white">
           {loading ? (
-            <div className="text-center text-xl ">
-              <p>Cargando...</p>
+            <div className="text-center  flex flex-col items-center justify-center">
+              <div className="loader bouncy">
+                <div className="cube">
+                  <div className="cube__inner"></div>
+                </div>
+                <div className="cube">
+                  <div className="cube__inner"></div>
+                </div>
+                <div className="cube">
+                  <div className="cube__inner"></div>
+                </div>
+              </div>
+              <p className="text-emerald-700 animate-pulse">Cargando...</p>
             </div>
           ) : conversaciones.length === 0 ? (
             <SinMensajes />
           ) : (
             conversaciones.map((conversacion) => {
+              /* Chat minitura la vista previa del chat */
               return (
-                <div
-                  key={conversacion.uidCombinado}
-                  onClick={() => {
-                    handleChat(conversacion);
-                  }}
-                  className="border-b border-t p-3 hover:bg-gray-100 transition-all cursor-pointer"
-                >
-                  <div className="flex items-center gap-3 relative">
-                    <AvatarUser
-                      className="w-12 h-12"
-                      user={conversacion.usuario}
-                    />
-                    <div className="flex flex-col gap-1">
-                      <p>{conversacion.usuario?.displayName}</p>
-                      <p className="truncate text-sm whitespace-normal">
-                        {conversacion.uidEmite === usuarioinSesion.uid ? (
-                          'Tú: '
-                        ) : (
-                          <>
-                            {conversacion.usuario?.displayName.split(' ')[0]}:{' '}
-                          </>
-                        )}
-
-                        {conversacion.ultimoMensaje.text?.slice(0, 30) || (
-                          <span className="text-xs">envia un mensaje</span>
-                        )}
-                      </p>
-                    </div>
-                    <span className="text-xs absolute bottom-0 right-0">
-                      {createTimeAgo(conversacion.ultimoMensaje.fecha)}
-                    </span>
-                  </div>
-                </div>
+                <AsideChat
+                  key={conversacion?.usuario?.uid}
+                  conversacion={conversacion}
+                  handleChat={handleChat}
+                />
               );
             })
           )}
         </section>
       </aside>
 
-      {/* Chat */}
+      {/* Chat, principal en donde se ven los mensajes */}
       <div
         className={`${
           anchoVentana < 768
@@ -148,6 +138,7 @@ function PaginaMensaje() {
         } w-full sm:w-[90%] md:w-full  transition-all flex flex-grow `}
       >
         <Chat
+          isMovil={anchoVentana < 768}
           setChatSeleccionado={setChatSeleccionado}
           chat={chatSeleccionado}
         />

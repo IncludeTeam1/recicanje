@@ -8,6 +8,7 @@ import { BotonAccion } from '../BotonAccion';
 /* Funciones */
 import { fileReader } from '../../../helpers/fileReader';
 import { updateMultimedia } from '../../../helpers/updateMultimedia';
+import { toast } from 'sonner';
 // import { BASE_URL_API } from '../../../config';
 
 function FormularioPublicacion({ user = {}, open, setOpen, refresh }) {
@@ -32,7 +33,7 @@ function FormularioPublicacion({ user = {}, open, setOpen, refresh }) {
     try {
       /* Verifica si no hay archivos y no hay texto */
       if (!file && !contenidoText.trim()) {
-        return alert('No hay nada para publicar sapo.');
+        return toast('No hay nada para publicar.');
       }
       setLoadingPublish(true);
       /* Información requerida para la publicación */
@@ -72,11 +73,11 @@ function FormularioPublicacion({ user = {}, open, setOpen, refresh }) {
 
       if (res.status === 200) {
         refresh();
-        alert('Publicación subida con exito');
+        toast.success('Publicación subida con exito');
       }
     } catch (error) {
       console.log(error);
-      alert('Ha ocurrido un error');
+      toast.error('Ha ocurrido un error');
     }
     setFile(null);
     setOpen(false);

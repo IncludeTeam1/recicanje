@@ -48,7 +48,6 @@ const idsBtnAuth = {
       flex flex-col items-center justify-center min-h-screen"
       >
         <h1
-          
           id="texto-maquina"
           class="text-6xl md:text-7xl font-bold text-center mb-2 text-transparent bg-gradient-to-r from-emerald-700 to-emerald-400 md:to-emerald-500 bg-clip-text transition-all pb-2 text-shadow skew-x-6"
         >
@@ -191,6 +190,7 @@ const idsBtnAuth = {
   import { app } from '../firebase/client';
   import { obtenerMensajeDeError } from '../constants/firebase/errores';
   import { NOMBRE_APP } from '../config';
+  import { toast } from 'sonner';
 
   const auth = getAuth(app);
   // Esto evitará que el navegador almacene los datos de sesión
@@ -298,12 +298,17 @@ const idsBtnAuth = {
           `${NOMBRE_APP}-userData`,
           JSON.stringify(userData),
         );
+
+        toast.success('Inicio de sesión');
+
         window.location.assign('/feed');
       }
     } catch (e) {
       console.log(e);
-      alert(JSON.stringify(e));
-      alert(obtenerMensajeDeError(e.code));
+      if (e.code) {
+        alert(JSON.stringify(e));
+        toast.error(obtenerMensajeDeError(e.code));
+      }
     }
     btnRegister.textContent = 'Registrarse';
     btnRegister.removeAttribute('disabled');
@@ -367,7 +372,9 @@ const idsBtnAuth = {
       } else if (lastIndexCurrentWord === currentWord.length && !isDeleting) {
         lastIndexCurrentWord = currentWord.length;
         isDeleting = true;
-        await wait(2000); // Espera 2 segundos antes de borrar la palabra
+        await wait(
+          containerText.classList.contains('text-shadow') ? 3000 : 500,
+        );
       }
 
       await wait(80); // Velocidad de escritura
@@ -375,53 +382,9 @@ const idsBtnAuth = {
   }
 
   typeWrite(containerTextToWrite, wordsToWrite);
-
-  /* Efecto maquina de escribir */
-  // const containerTextToWrite = document.getElementById('texto-maquina');
-  // const wordsToWrite = [
-  //   'Recicanje',
-  //   'Reciclar',
-  //   'Reutilizar',
-  //   'Rocco',
-  //   'Reconectar',
-  //   'Remover',
-  //   'Retirar',
-  // ];
-  // function typeWrite(containerText, wordsToWrite: Array<string>) {
-  //   let indexCurrentWord = 0;
-  //   let currentWord = wordsToWrite[indexCurrentWord];
-  //   let lastIndexCurrentWord = currentWord.length;
-
-  //   let qtWords = wordsToWrite.length;
-  //   let isDeleting = true;
-
-  //   setInterval(async () => {
-  //     /* Borrar */
-  //     if (isDeleting) {
-  //       lastIndexCurrentWord--;
-  //     } else {
-  //       lastIndexCurrentWord++;
-  //     }
-  //     containerText.innerText = currentWord.slice(0, lastIndexCurrentWord);
-
-  //     // Deja la primera letra para borrar
-  //     if (lastIndexCurrentWord === 1 && isDeleting) {
-  //       indexCurrentWord =
-  //         indexCurrentWord == qtWords - 1 ? 0 : indexCurrentWord + 1; // pasa a la sieguiente palabra
-
-  //       currentWord = wordsToWrite[indexCurrentWord];
-  //       // lastIndexCurrentWord = currentWord.length;
-  //       isDeleting = false;
-  //     } else if (lastIndexCurrentWord === currentWord.length && !isDeleting) {
-  //       lastIndexCurrentWord = currentWord.length;
-  //       isDeleting = true;
-  //     }
-  //     console.log({ lastIndexCurrentWord, isDeleting, indexCurrentWord });
-  //   }, 1000);
-  // }
-  // /* De esta forma si hace lo que se pide que es borrar la palabra, dejar la primera letra y empezar a escribir la  siguiente palabra, pero al pasar de palabra hay que esperar unos dos segundos para que se borre de nuevo la palabra*/
-  // typeWrite(containerTextToWrite, wordsToWrite);
 </script>
+
+<!-- Estilos para cuando este la palabra claveF -->
 <style>
   .text-shadow {
     transform: translateY(-0.5em) scale(1.25);

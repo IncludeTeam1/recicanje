@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const { Schema, model, models } = mongoose;
-delete mongoose.connection.models['Usuario'];
+
 const usuarioSchema = new Schema({
   uid: {
     type: String,
@@ -25,6 +25,7 @@ const usuarioSchema = new Schema({
   correoElectronico: {
     type: String,
     required: true,
+    unique: true,
   },
   ultimoInicioSesion: {
     type: Date,
