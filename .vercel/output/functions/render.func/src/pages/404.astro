@@ -1,0 +1,127 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+import { ViewTransitions } from 'astro:transitions';
+
+import { app } from '../firebase/server';
+import { getAuth } from 'firebase-admin/auth';
+
+/* Componentes */
+import { Header } from '../components/react/Header';
+
+// const auth = getAuth(app);
+
+// const sessionCookie = Astro.cookies.get('session')?.value;
+// if (sessionCookie) {
+//   const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+//   const user = await auth.getUser(decodedCookie.uid);
+//   if (user) {
+//     return Astro.redirect('/feed');
+//   }
+// }
+---
+
+<!-- JS del servidor --><!-- HTML --><!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Recicanje</title>
+    <ViewTransitions />
+  </head>
+  <body>
+    <main class="main">
+      <div
+        style="background-image: url(https://imgs.search.brave.com/Yo4ozDPBbcHjAlmMGkD7Zr1oqxOpwipDRe7FmRfcWwU/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbWFn/ZXMudmV4ZWxzLmNv/bS9tZWRpYS91c2Vy/cy8zLzEyNzAxMC9p/c29sYXRlZC9wcmV2/aWV3LzIyMTA2MTQz/NWU5ZTM1MDg2NmZj/ZWViYjU1MjRhODI5/LWljb25vLWRlLXJl/Y2ljbGFqZS1zeW1i/b2wtc3ZnLnBuZw);"
+        class="image"
+      >
+      </div>
+
+      <!-- Texto -->
+      <div class="container-text">
+        <p class="text">Te perdiste mi rey?</p>
+        <button id="btn-back" class="btn-back">Back to home</button>
+      </div>
+    </main>
+
+    <script></script>
+
+    <!-- CSS -->
+    <style>
+      body {
+        overflow-x: hidden;
+        background-color: #000;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        width: 100%;
+      }
+      .main {
+        width: 100%;
+        height: 100%;
+      }
+
+      .image {
+        width: 80%;
+        max-width: 800px;
+        height: 600px;
+        /* border: 1px solid orangered; */
+
+        margin: 0px auto;
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        animation: spin 3s infinite linear;
+      }
+
+      .container-text {
+        text-align: center;
+        font-size: 2em;
+        font-weight: bold;
+        letter-spacing: 2px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      .btn-back {
+        outline: 1px solid teal;
+        padding: 5px 20px;
+        border-radius: 16px;
+        font-weight: 400;
+        color: teal;
+        width: 50%;
+        max-width: 300px;
+        transition: all 0.3s;
+
+        font-size: calc(2vmin + 8px);
+      }
+
+      .btn-back:hover {
+        color: white;
+        outline: 1px solid white;
+        background-color: teal;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script>
+      const btnBack = document.querySelector('#btn-back');
+      btnBack.addEventListener('click', (e) => {
+        window.location.replace('/feed');
+      });
+    </script>
+  </body>
+</html>

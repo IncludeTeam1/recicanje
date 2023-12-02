@@ -1,0 +1,1 @@
+import{j as a}from"./jsx-runtime.236aeee0.js";function s({onClick:o,className:r="",children:t,...n}){return a.jsx("button",{className:`rounded-full hover:opacity-70 hover:scale-95 transition-all hover:bg-gray-300 p-2 ${r}`,onClick:o,...n,children:t})}export{s as B};

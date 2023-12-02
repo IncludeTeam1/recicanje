@@ -1,0 +1,1 @@
+const a=[["day",86400],["hour",3600],["minute",60],["second",1]],i=t=>{const e=new Date(t).getTime(),n=Date.now(),o=(e-n)/1e3;for(const[c,r]of a)if(Math.abs(o)>r||c==="second")return{value:Math.round(o/r),unit:c}};function f(t,s="short"){if(t){const{unit:e,value:n}=i(t);return new Intl.RelativeTimeFormat("es",{style:s}).format(n,e)}return""}export{f as c};

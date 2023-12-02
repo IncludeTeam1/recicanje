@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import imgDefault from '../../assets/images/placeholder.jpg';
 
 /* Por lo general este componente renderiza el avatar actualizado, excepto el de las publicaciones y me imagino que el de las sección
