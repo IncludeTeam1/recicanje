@@ -8,7 +8,7 @@ import { app } from '../../firebase/client';
 import { getAuth } from 'firebase/auth';
 import { GoogleIcon } from '../../icons/GoogleIcon';
 import { FacebookIcon } from '../../icons/FacebookIcon';
-import { NOMBRE_APP } from '../../config';
+import { NOMBRE_APP, BASE_URL_API } from '../../config';
 import { toast } from 'sonner';
 
 function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
@@ -51,7 +51,7 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
           JSON.stringify(userData)
         );
 
-        window.location.assign('/feed');
+        window.location.assign(`${BASE_URL_API}/feed`);
       }
       if (error) {
         console.log(error);
@@ -68,7 +68,10 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
         if (
           obtenerMensajeDeError(error.code) === 'Ocurrio un error desconocido'
         ) {
-          alert(JSON.stringify(error));
+          toast.error(obtenerMensajeDeError(error), {
+            position: 'top-center',
+            className: 'bg-rose-600 text-rose-900',
+          });
         }
         toast.error(obtenerMensajeDeError(error), {
           position: 'top-center',
@@ -115,7 +118,7 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
           JSON.stringify(userData)
         );
 
-        window.location.assign('/feed');
+        window.location.assign(`${BASE_URL_API}/feed`);
       }
     } catch (error) {
       console.log(error);

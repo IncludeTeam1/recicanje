@@ -1,4 +1,5 @@
 import sin_mensajes from '../../../assets/images/sin_mensajes.svg';
+import { BASE_URL_API } from '../../../config';
 
 function SinMensajes({ title = 'Aún no tienes mensajes' }) {
   return (
@@ -13,7 +14,7 @@ function SinMensajes({ title = 'Aún no tienes mensajes' }) {
       <p className="text-center">
         Busca contactos con los que puedas intercambiar ideas y poder conseguir
         lo que quieres.{' '}
-        <a className="text-sky-600" href="/mi-red">
+        <a className="text-sky-600" href={`${BASE_URL_API}/mi-red`}>
           Busca contactos
         </a>
       </p>

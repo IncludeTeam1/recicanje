@@ -33,8 +33,12 @@ function MensajeChat({ msg }) {
         <p className="whitespace-break-spaces text-sm">{msg.contenido.texto}</p>
       </div>
 
-      <span className="text-[10px] whitespace-nowrap ">
-        {createTimeAgo(msg?.fecha)?.split(' ')?.slice(1)?.join(' ')}
+      <span className="text-xs whitespace-nowrap ">
+        {new Date(msg?.fecha).toLocaleTimeString('es-Es', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        })}
       </span>
     </div>
   );

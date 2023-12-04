@@ -175,16 +175,15 @@ const { className } = Astro.props;
           photoUrl: userCredential.user.photoURL,
           _id: resDb._id,
         };
-        // alert(JSON.stringify(userData));
+
         localStorage.setItem(
           `${NOMBRE_APP}-userData`,
           JSON.stringify(userData),
         );
 
-        window.location.assign('/feed');
+        window.location.assign(`${BASE_URL_API}/feed`);
       }
     } catch (error) {
-      alert(JSON.stringify(error));
       const mensaje = obtenerMensajeDeError(error.code);
       toast.error(mensaje);
     }

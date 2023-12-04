@@ -175,7 +175,7 @@ function FormularioActualizar({ user, setAbrirModal }) {
               id="apellido"
             />
             <InputText
-              maxLength={20}
+              maxLength={50}
               onInput={handleInput}
               name="displayName"
               label="Nombre a mostrar"

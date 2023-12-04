@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { NOMBRE_APP } from '../../../config';
+import { BASE_URL_API, NOMBRE_APP } from '../../../config';
 import { createTimeAgo } from '../../../helpers/timeAgo';
 import { AvatarUser } from '../../react/AvatarUser';
 import { BotonAccion } from '../BotonAccion';
@@ -177,7 +177,7 @@ function TarjetaComentario({
                 currentComentario.contenido?.texto && (
                   <p
                     dangerouslySetInnerHTML={{
-                      __html: `<div><a href="/perfil/${comentarioRespuesta?.usuarioRespuesta?.uid}"
+                      __html: `<div><a href="${BASE_URL_API}/perfil/${comentarioRespuesta?.usuarioRespuesta?.uid}"
                       style="font-size:14px; color:#09f" >${comentarioRespuesta?.usuarioRespuesta?.displayName}</a>    ${currentComentario.contenido?.texto}</div>`,
                     }}
                   ></p>

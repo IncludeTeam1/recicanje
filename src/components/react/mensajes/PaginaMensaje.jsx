@@ -82,7 +82,6 @@ function PaginaMensaje() {
   }, []);
 
   function handleChat(chat) {
-    console.log({ chat });
     setChatSeleccionado(chat);
   }
 
@@ -94,9 +93,13 @@ function PaginaMensaje() {
       >
         <h2 className="text-xl text-gray-500 p-3 text-center">Mensajes</h2>
 
-        <section className="min-h-[500px] h-[100%] bg-white">
+        <section
+          className="min-h-[500px]
+          w-full 
+          h-[100%] bg-white"
+        >
           {loading ? (
-            <div className="text-center  flex flex-col items-center justify-center">
+            <div className="relative mt-5">
               <div className="loader bouncy">
                 <div className="cube">
                   <div className="cube__inner"></div>
@@ -108,7 +111,6 @@ function PaginaMensaje() {
                   <div className="cube__inner"></div>
                 </div>
               </div>
-              <p className="text-emerald-700 animate-pulse">Cargando...</p>
             </div>
           ) : conversaciones.length === 0 ? (
             <SinMensajes />

@@ -48,6 +48,8 @@ function HeaderPublicacion({ refresh, publicacion }) {
           } catch (error) {
             console.log(error);
             toast.error('No se ha podido eliminar la publicación');
+          } finally {
+            toast.dismiss();
           }
         },
       },

@@ -1,5 +1,5 @@
 import { toast } from 'sonner';
-import { NOMBRE_APP } from '../../config';
+import { NOMBRE_APP, BASE_URL_API } from '../../config';
 import { AvatarUser } from '../react/AvatarUser';
 
 const bg =
@@ -18,7 +18,7 @@ function TarjetaUsuario({ user, className = '', ...props }) {
     if (res.status === 200) {
       localStorage.removeItem(`${NOMBRE_APP}-userData`);
       toast.success('Sesión cerrada');
-      window.location.assign('/login');
+      window.location.assign(`${BASE_URL_API}/login`);
     }
   }
 
@@ -54,7 +54,7 @@ function TarjetaUsuario({ user, className = '', ...props }) {
           <p>
             Contacte con las personas más cercanas{' '}
             <a
-              href="/mi-red"
+              href={`${BASE_URL_API}/mi-red`}
               className="text-violet-700 underline-offset-2 underline"
             >
               puedes encontrarlas aquí

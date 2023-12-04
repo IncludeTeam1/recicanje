@@ -189,7 +189,7 @@ const idsBtnAuth = {
   } from 'firebase/auth';
   import { app } from '../firebase/client';
   import { obtenerMensajeDeError } from '../constants/firebase/errores';
-  import { NOMBRE_APP } from '../config';
+  import { BASE_URL_API, NOMBRE_APP } from '../config';
   import { toast } from 'sonner';
 
   const auth = getAuth(app);
@@ -301,12 +301,11 @@ const idsBtnAuth = {
 
         toast.success('Inicio de sesión');
 
-        window.location.assign('/feed');
+        window.location.assign(`${BASE_URL_API}/feed`);
       }
     } catch (e) {
       console.log(e);
       if (e.code) {
-        alert(JSON.stringify(e));
         toast.error(obtenerMensajeDeError(e.code));
       }
     }

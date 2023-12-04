@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 /* Iconst */
 import { HomeIcon } from '../../icons/HomeIcon';
 import { MsgIcon } from '../../icons/MsgIcon';
@@ -9,6 +9,7 @@ import { AvatarUser } from './AvatarUser';
 
 import logo from '../../assets/images/logo_demo.png';
 import { NavLink } from './NavLink';
+import { BASE_URL_API } from '../../config';
 
 function Header({ user = {} }) {
   const menuItems = [
@@ -76,7 +77,10 @@ function Header({ user = {} }) {
       <div className="w-[90%] mx-auto max-w-[1200px]  flex justify-between items-center">
         <div className="flex items-center gap-3    w-full md:max-w-[500px]">
           {/* Logo */}
-          <a className="hover:scale-95  transition" href="/feed">
+          <a
+            className="hover:scale-95  transition"
+            href={`${BASE_URL_API}/feed`}
+          >
             <img
               src={logo.src}
               alt="Logo de recicanje"
@@ -95,7 +99,7 @@ function Header({ user = {} }) {
 
           <a
             className="flex flex-col justify-center items-center"
-            href={`/perfil/${user.uid}`}
+            href={`${BASE_URL_API}/perfil/${user.uid}`}
           >
             <AvatarUser className="w-10 h-8 md:hidden" user={currentUser} />
           </a>

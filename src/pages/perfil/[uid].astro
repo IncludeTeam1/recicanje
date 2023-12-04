@@ -25,6 +25,7 @@ import { SeccionPublicaciones } from '../../components/react/feed/SeccionPublica
 import { TarjetaUsuario } from '../../components/auth/TarjetaUsuario';
 import { UsersIcon } from '../../icons/UsersIcon';
 
+
 const auth = getAuth(app);
 
 const sessionCookie = Astro.cookies.get('session')?.value;
@@ -76,10 +77,11 @@ if (sessionCookie) {
       <UsersIcon className='stroke-black' />
       </h1>
     </div>
-    <a href="/feed" class="border p-3 text-cyan-600 border-cyan-600 rounded-md hover:rounded-2xl hover:bg-cyan-50 transition-all " >Volver al home</a>
+    <a  href={`${BASE_URL_API}/mi-red/feed`} class="border p-3 text-cyan-600 border-cyan-600 rounded-md hover:rounded-2xl hover:bg-cyan-50 transition-all " >Volver al home</a>
 </div>
 
 }
+
 </LayoutPrincipal>
 
 <script>

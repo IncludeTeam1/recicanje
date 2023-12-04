@@ -2,6 +2,7 @@
 import LayoutPrincipal from '../../layouts/LayoutPrincipal.astro';
 export const prerender = false;
 import { SeccionContactosConectados } from '../../components/react/red/SeccionContactosConectados';
+import { BASE_URL_API } from '../../config';
 ---
 
 <LayoutPrincipal title="Mis contactos">
@@ -16,7 +17,7 @@ import { SeccionContactosConectados } from '../../components/react/red/SeccionCo
       >
         Contactos
       </h2>
-      <a href="/mi-red" class="text-xl">🔙</a>
+      <a href={`${BASE_URL_API}/mi-red/contactos`} class="text-xl">🔙</a>
     </div>
     <SeccionContactosConectados client:only />
   </main>

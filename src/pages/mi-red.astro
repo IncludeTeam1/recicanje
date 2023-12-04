@@ -4,6 +4,7 @@ import { SeccionContactos } from '../components/react/red/SeccionContactos';
 
 // import { BASE_URL_API } from "../../config";
 import { UsersIcon } from '../icons/UsersIcon';
+import { BASE_URL_API } from '../config';
 // const res = await fetch(`${BASE_URL_API}/api/usuarios/obtenerSugerencias`);
 
 export const prerender = false;
@@ -24,7 +25,7 @@ export const prerender = false;
       <h2 class="text-xl text-gray-500 p-3 text-center">Gestionar mi red</h2>
       <div class="flex flex-col">
         <a
-          href="/mi-red/contactos"
+          href={`${BASE_URL_API}/mi-red/contactos`}
           class="flex gap-1 items-center p-3 hover:bg-gray-300 cursor-pointer w-full"
         >
           <span
@@ -33,7 +34,7 @@ export const prerender = false;
         </a>
 
         <a
-          href="/mi-red"
+          href={`${BASE_URL_API}/mi-red`}
           class="flex gap-1 items-center hover:bg-gray-300 cursor-pointer w-full
         p-3 bg-gray-100"
         >

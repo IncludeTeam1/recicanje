@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { NOMBRE_APP } from '../../../config';
+import { BASE_URL_API, NOMBRE_APP } from '../../../config';
 import { mesesDelAño } from '../../../constants/mesesDelAño';
 import { CalendarioIcon } from '../../../icons/CalendarioIcon';
 import { AvatarUser } from '../AvatarUser';
@@ -131,12 +131,16 @@ function HeaderUsuario({ infoUsuario }) {
   }
 
   function handleClik(u) {
+    console.log({ u });
+    console.log({ accion });
     if (accion === 'Sugerencia') {
       handleConectar(u);
     } else if (accion === 'Pendiente') {
       handlePendiente(u);
     } else if (accion === 'Confirmar') {
       handleConfirmar(u);
+    } else if (accion === 'enviarMensaje') {
+      window.location.assign(`${BASE_URL_API}/mensajes`);
     }
   }
 

@@ -22,3 +22,4 @@ pnpm-debug.log*
 
 # firebase credential
 recicanje-74f46-firebase-adminsdk-qgcs1-a2e6fe810e.json
+.vercel

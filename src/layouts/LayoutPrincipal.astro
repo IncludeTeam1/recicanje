@@ -14,6 +14,7 @@ import { getAuth } from 'firebase-admin/auth';
 import { Header } from '../components/react/Header';
 import { BurbujaMensajes } from '../components/react/mensajes/BurbujaMensajes';
 import { BASE_URL_API, NOMBRE_APP } from '../config';
+import { Toaster } from 'sonner';
 
 const auth = getAuth(app);
 
@@ -34,7 +35,6 @@ const res = await fetch(`${BASE_URL_API}/api/usuarios/obtenerUsuario`, {
   body: JSON.stringify({ uid: userAuth.uid }),
 });
 const { infoUsuario: user } = await res.json();
-import { Toaster } from 'sonner';
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
@@ -53,7 +53,7 @@ import { Toaster } from 'sonner';
       rel="stylesheet"
     />
     <title>{title}</title>
-    <ViewTransitions fallback="none" />
+    <!-- <ViewTransitions fallback="none" /> -->
   </head>
   <body
     class="bg-gradient-to-b
@@ -65,11 +65,12 @@ import { Toaster } from 'sonner';
       class={`md:p-5   flex-grow text-black w-full sm:w-[90%] mx-auto max-w-[1300px] pb-[100px]  ${classNameLayout}`}
     >
       <slot />
+
+      <Toaster closeButton position="top-right" client:only />
       <!-- Aqui iria el componente pequeño de los comentarios. -->
-      <BurbujaMensajes user={user} client:only />
+      <!-- <BurbujaMensajes user={user} client:only /> -->
     </main>
 
-    <Toaster closeButton position="top-right" client:only />
     <script></script>
 
     <!-- CSS -->
