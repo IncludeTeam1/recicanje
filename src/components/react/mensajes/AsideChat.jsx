@@ -1,5 +1,5 @@
-import { NOMBRE_APP } from '../../../config';
-import { createTimeAgo } from '../../../helpers/timeAgo';
+import { NOMBRE_APP } from '@/config';
+import { createTimeAgo } from '@/helpers/timeAgo';
 import { AvatarUser } from '../AvatarUser';
 
 function AsideChat({ conversacion, handleChat }) {

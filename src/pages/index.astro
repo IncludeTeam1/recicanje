@@ -1,6 +1,4 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-
 import { app } from '../firebase/server';
 import { getAuth } from 'firebase-admin/auth';
 
@@ -21,9 +19,11 @@ import mockup_mobil from '../assets/images/mockup_reci_movil.png';
 import wave from '../assets/images/wave.svg';
 import { CalendarioIcon } from '../icons/CalendarioIcon';
 
-import { UsersIcon } from '../icons/UsersIcon';
-import { PhotoIcon } from '../icons/PhotoIcon';
-import { BASE_URL_API } from '../config';
+import { UsersIcon } from '@/icons/UsersIcon';
+import { PhotoIcon } from '@/icons/PhotoIcon';
+import { BASE_URL_API } from '@/config';
+
+import DetailsService from '@/componentes/DetailsService.astro';
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
@@ -46,60 +46,80 @@ import { BASE_URL_API } from '../config';
     />
 
     <title>Recicanje</title>
-    <ViewTransitions />
   </head>
-  <body
-    class="bg-gradient-to-b from-emerald-900 via-emerald-950 to-emerald-700
-  min-h-screen w-full flex flex-col mx-auto"
-  >
+  <body class="min-h-screen w-full flex flex-col mx-auto">
     <header
-      class="flex text-emerald-100 justify-center w-full mx-auto flex-col mt-10"
+      class="flex text-emerald-100 justify-center w-full mx-auto flex-col pt-10
+       relative "
     >
-      <section class="w-[90%] h-[250px] mx-auto">
-        <div class="flex flex-col justify-center items-center gap-3">
-          <h1 id="texto-maquina" class="text-3xl font-bold transition-all">
+      <section class="w-[90%] mx-auto">
+        <div class="flex flex-col justify-center items-center gap-3 animate-fade-down">
+          <h1
+            id="texto-maquina"
+            class="text-3xl md:text-5xl lg:text-6xl font-bold transition-all"
+          >
             RECICANJE
           </h1>
-          <p class="font-serif text-center text-xs md:text-sm lg:text-base">
-            Únete a la comunidad que fomenta el reciclaje y busca un cambio
-            cultural de verdad.
+          <p class="font-poppins text-center text-lg leading-7">
+            Únete a la <strong>comunidad</strong> que fomenta <strong
+              >el reciclaje</strong
+            > y busca
+            <strong>un cambio cultural de verdad.</strong>
           </p>
           <a
-            class="py-2 px-4 rounded-md flex items-center justify-center bg-emerald-700 shadow-2xl hover:bg-white hover:text-emerald-700 transition-all"
+            class="py-3 font-bold px-8 rounded-md flex items-center justify-center bg-emerald-700 shadow-2xl hover:bg-white hover:text-emerald-700 transition-all"
             href={`${BASE_URL_API}/login`}>Comenzar</a
           >
         </div>
+
         <!-- Mockups -->
         <figure
-          class="relative flex justify-center items-center max-w-[768px] mx-auto"
+          class="relative flex justify-center items-center max-w-[768px] mt-10 mx-auto hover:scale-105 transition"
         >
           <img
+            class="animate-fade-up animate-duration-500"
+            loading="eager"
             src={mockup.src}
             alt="Mockup de la red social intuitiva recicanje"
           />
           <img
-            class="absolute w-[20%] left-0"
+            loading="eager"
+            class="absolute w-[20%] animate-fade-up animate-duration-1000 left-0"
             src={mockup_mobil.src}
             alt="Mockup de la red social intuitiva recicanje en dispositivos moviles"
           />
         </figure>
       </section>
-      <img class="-z-40" src={wave.src} alt="Wave" />
+
+      <!-- --- wave --- -->
+      <div
+        class="bg-gradient-to-b from-emerald-900 via-emerald-950 to-emerald-700 h-[50vh] md:h-[60vh] w-full
+        absolute top-0 -z-10 flex items-end"
+      >
+        <img loading="eager" class="z-40 w-full" src={wave.src} alt="Wave" />
+      </div>
     </header>
-    <!-- wave -->
-    <main
-      class="bg-white pt-[100px] sm:pt-[200px] md:pt-[180px] lg:[100px] 2xl:pt-[10px] w-full flex flex-col"
-    >
+
+    <main class="bg-white w-full flex flex-col mt-10">
       <!-- Sección de servicios -->
       <section
-        class="flex max-w-[1048px] flex-col lg:flex-row gap-3 w-[90%] mx-auto"
+        class="flex max-w-5xl flex-col lg:flex-row gap-3 lg:gap-6 w-[90%] mx-auto"
       >
+        <!-- <CardServices
+          title="Crear una cuenta es muy fácil"
+          text="Puedes crear una cuenta como en cualquier red social, inicia con google o tu
+        cuenta de facebook"
+        /> -->
+
         <div
-          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md flex-1"
+          class="bg-slate-100 flex flex-col justify-start p-5 rounded-md shadow-md flex-1 animate-fade-down animate-delay-200 hover:shadow-xl transition"
         >
-          <CalendarioIcon className="stroke-emerald-700" client:load />
-          <div class="flex flex-col gap-1">
-            <h2 class="font-bold text-emerald-700 text-lg">
+          <CalendarioIcon
+            className="stroke-emerald-700 w-14 h-14 "
+            client:load
+          />
+          <div class="flex flex-col gap-1 mt-5">
+            <h2 class="font-semibold text-emerald-700 text-2xl">
               Crear una cuenta es muy fácil
             </h2>
             <p>
@@ -109,27 +129,32 @@ import { BASE_URL_API } from '../config';
           </div>
         </div>
 
-        <div
-          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md flex-1"
-        >
-          <UsersIcon className="stroke-emerald-700" client:load />
-          <div class="flex flex-col gap-1">
-            <h2 class="font-bold text-emerald-700 text-lg">
-              Conectate con gente de todo el país
-            </h2>
-            <p>
-              Encontraras personas con la misma voluntad que tú, dispuestos a
-              mejorar y generar un cambio cultural
-            </p>
+        <!-- Conoce gente -->
+        <div class="lg:translate-y-5 flex flex-col justify-start flex-1">
+          <div
+            class="p-5 rounded-md shadow-md bg-slate-100 animate-fade-down animate-delay-300 hover:shadow-xl transition"
+          >
+            <UsersIcon className="stroke-emerald-700 w-14 h-14 " client:load />
+
+            <div class="flex flex-col gap-1 mt-5">
+              <h2 class="font-semibold text-emerald-700 text-2xl">
+                Conectate con gente de todo el país
+              </h2>
+              <p>
+                Encontraras personas con la misma voluntad que tú, dispuestos a
+                mejorar y generar un cambio cultural
+              </p>
+            </div>
           </div>
         </div>
 
+        <!-- Cuenta empresa -->
         <div
-          class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md flex-1"
+          class="bg-slate-100 flex flex-col justify-start p-5 rounded-md shadow-md flex-1 animate-fade-down animate-delay-500 hover:shadow-xl transition"
         >
-          <PhotoIcon className="stroke-emerald-700" client:load />
-          <div class="flex flex-col gap-1">
-            <h2 class="font-bold text-emerald-700 text-lg">
+          <PhotoIcon className="stroke-emerald-700 w-14 h-14 " client:load />
+          <div class="flex flex-col gap-1 mt-5">
+            <h2 class="font-semibold text-emerald-700 text-2xl">
               Cuenta de empresa
             </h2>
             <p>
@@ -139,9 +164,13 @@ import { BASE_URL_API } from '../config';
         </div>
       </section>
 
-      <!-- Sección de contacto -->
+      <!-- Sección de los detalles de cada servicio -->
+      <DetailsService client:visible />
 
-      <h2 class="text-center mt-40 mb-5 font-bold text-3xl">
+      <!-- Sección de contacto -->
+      <h2
+        class="text-center mt-40 mb-5 font-semibold text-3xl md:text-5xl text-emerald-700"
+      >
         Dónde nació todo!
       </h2>
       <section class="text-emerald-950 body-font relative">

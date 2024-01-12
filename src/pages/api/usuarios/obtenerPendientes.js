@@ -2,6 +2,7 @@ import Usuario from '../../../models/Usuario';
 import dbConnect from '../../../libs/dbConnect';
 
 export const POST = async ({ request }) => {
+  dbConnect();
   try {
     const data = await request.json();
     const { user_id } = data;

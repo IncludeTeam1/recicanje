@@ -5,6 +5,7 @@ import { NOMBRE_APP } from '../../config';
 function SugerenciasContactos({ user = {}, limit = 4 }) {
   const [sugerencias, setSugerencias] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [loadingConect, setLoadingConect] = useState(false);
 
   const usuarioSesion = JSON.parse(
@@ -18,10 +19,14 @@ function SugerenciasContactos({ user = {}, limit = 4 }) {
     )
       .then((res) => res.json())
       .then(({ usuarios }) => {
-        setSugerencias(usuarios);
+        console.log(usuarios);
+        if (usuarios) {
+          setSugerencias(usuarios);
+        }
       })
       .catch((e) => {
         console.log(e);
+        setError(true);
       })
       .finally(() => {
         setLoading(false);
@@ -63,27 +68,27 @@ function SugerenciasContactos({ user = {}, limit = 4 }) {
         </p>
       ) : sugerencias?.length < 1 ? (
         <div className="p-2">
-          <p className=" text-center">No hay personas</p>
+          {error ? '' : <p className=" text-center">No hay personas</p>}
         </div>
       ) : (
         <div className="flex flex-col  w-full gap-3 ">
-          {sugerencias.map((sugerencia) => {
+          {sugerencias?.map((sugerencia) => {
             return (
               /* Enlace para llevar al perfil del usuario */
               <div
-                key={sugerencia.uid + sugerencia._id}
+                key={sugerencia?.uid + sugerencia?._id}
                 className="flex items-center justify-between gap-2 p-3
               hover:bg-gray-100 w-full  cursor-pointer transition"
               >
                 <a
-                  href={`/perfil/${sugerencia.uid}`}
+                  href={`/perfil/${sugerencia?.uid}`}
                   className="flex items-center justify-between gap-2 
                   hover:bg-gray-100 w-full  cursor-pointer transition
                   "
                 >
                   <div className="flex gap-1 items-center">
                     <AvatarUser className="w-8 h-8" user={sugerencia} />
-                    <p className="text-sm"> {sugerencia.displayName} </p>
+                    <p className="text-sm"> {sugerencia?.displayName} </p>
                   </div>
                 </a>
                 <button
@@ -101,14 +106,25 @@ function SugerenciasContactos({ user = {}, limit = 4 }) {
             );
           })}
 
-          <a
-            href="/mi-red"
-            className="text-center text-sm underline underline-offset-2 pb-2 
+          {error ? (
+            <a
+              href="/mi-red"
+              className="text-center text-sm underline underline-offset-2 pb-2 
             hover:text-sky-600 hover:scale-105 transition
             "
-          >
-            Mostrar más
-          </a>
+            >
+              Encentra a más personas
+            </a>
+          ) : (
+            <a
+              href="/mi-red"
+              className="text-center text-sm underline underline-offset-2 pb-2 
+            hover:text-sky-600 hover:scale-105 transition
+            "
+            >
+              Mostrar más
+            </a>
+          )}
         </div>
       )}
     </article>

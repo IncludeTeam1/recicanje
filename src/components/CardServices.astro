@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  text: string;
+}
+
+const { title, text } = Astro.props;
+---
+
+<div
+  class="bg-slate-100 flex flex-col justify-start p-3 rounded-md shadow-md flex-1"
+>
+  <!-- <CalendarioIcon className="stroke-emerald-700" client:load /> -->
+
+  <div class="flex flex-col gap-1">
+    <h2 class="font-bold text-emerald-700 text-lg">
+      {title}
+    </h2>
+    <p>
+      {text}
+    </p>
+  </div>
+</div>

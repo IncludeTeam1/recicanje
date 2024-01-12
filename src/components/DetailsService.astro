@@ -1,0 +1,180 @@
+---
+import { detailService } from '../constants/detailsService';
+
+/* This only render in the backend */
+
+const arrKeys = Object.keys(detailService);
+import iconArrowDown from '@/assets/images/icon-arrow-down.svg';
+---
+
+<section class="my-10 mt-28 container-principal">
+  <h2
+    class="text-3xl md:text-5xl text-center mb-10 text-emerald-700 font-semibold opacity-0"
+  >
+    ¿Qué puedes hacer?
+  </h2>
+  <article
+    class="w-[90%] max-w-6xl mx-auto flex flex-col md:flex-row lg:gap-14 gap-2 items-start justify-between opacity-0 "
+  >
+    <!-- Acordions -->
+    <div
+      class="container-details w-full md:max-w-xs flex-grow flex flex-col gap-2"
+    >
+      {
+        arrKeys.map((key, index) => {
+          return (
+            <details
+              open={index === 0}
+              class="py-4 px-5 border rounded-md shadow-md  hover:shadow-lg transition open:shadow-xl"
+              name="details"
+            >
+              {' '}
+              <summary
+                data-detail={key}
+                class="font-sans  text-xl text-emerald-950 font-semibold list-none flex justify-between items-center cursor-pointer "
+              >
+                {detailService[key].data.title}
+                <img
+                  src={iconArrowDown.src}
+                  class="summary-icon w-3 h-2 transition"
+                />
+              </summary>
+              <p class="animate-fade-down animate-duration-150 font-poppins  text-sm py-2">
+                {detailService[key].data.description}
+              </p>
+            </details>
+          );
+        })
+      }
+    </div>
+
+    <!-- Images -->
+    <div class="container-images w-full md:flex-grow">
+      {
+        arrKeys.map((key, index) => {
+          return (
+            <img
+              data-image={`img-${key}`}
+              class={`image-${index}`}
+              src={detailService[key].img.src}
+              alt={`Mockup que muestra la sección de ${detailService[key].data.title}`}
+            />
+          );
+        })
+      }
+    </div>
+  </article>
+</section>
+
+<style>
+  /* Details */
+
+  details[open] .summary-icon {
+    transform: rotate(180deg);
+  }
+  /*  Images */
+  .container-images {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    aspect-ratio: 16/9;
+  }
+
+  .container-images img {
+    position: absolute;
+    aspect-ratio: 16/9;
+    max-width: 768px;
+    max-height: 434px;
+    width: 100%;
+    left: 0;
+    top: 0;
+    height: 100%;
+    filter: drop-shadow(0 1px 2px gray);
+    transition: all 0.3s ease-in-out;
+  }
+
+  .image-0 {
+    z-index: 1000;
+  }
+
+  .image-1 {
+    z-index: 900;
+    transform: translateY(10%);
+  }
+  .image-2 {
+    z-index: 800;
+    transform: translateY(20%);
+  }
+  .image-3 {
+    z-index: 700;
+    transform: translateY(30%);
+  }
+  .image-4 {
+    z-index: 600;
+    transform: translateY(40%);
+  }
+  /* Position the images in desktop */
+  @media (min-width: 748px) {
+    .image-1 {
+      z-index: 900;
+      transform: translateY(5%) translateX(2%);
+    }
+    .image-2 {
+      z-index: 800;
+      transform: translateY(10%) translateX(5%);
+    }
+    .image-3 {
+      z-index: 700;
+      transform: translateY(15%) translateX(8%);
+    }
+    .image-4 {
+      z-index: 600;
+      transform: translateY(20%) translateX(10%);
+    }
+  }
+
+  details {
+  }
+</style>
+
+<script>
+  // TODO: solo tengo que camibar las clases entre la clase seleccionada
+  
+  const summaries = [
+    ...document.querySelectorAll('.container-details  summary'),
+  ];
+
+  function changeTheClassForImage({ key }) {
+    // find  related image
+    const img = document.querySelector(`[data-image="img-${key}"]`);
+    const firstImg = document.querySelector(`.container-images .image-0`);
+    const classToTheChange = img.className;
+
+    img.classList.replace(classToTheChange, 'image-0');
+    firstImg.classList.replace('image-0', classToTheChange);
+  }
+
+  summaries.forEach((detail) => {
+    detail.addEventListener('click', () => {
+      const key = detail.getAttribute('data-detail');
+      changeTheClassForImage({ key });
+      /* I am the Boss baby 😎 */
+    });
+  });
+
+  const containerPrincipal = document.querySelector('.container-principal');
+
+  const observer = new IntersectionObserver((entries) => {
+    console.log(entries);
+    const elementToObserver = entries[0];
+
+    if (elementToObserver.isIntersecting) {
+      containerPrincipal.querySelector('h2').classList.add('animate-fade-up');
+      containerPrincipal
+        .querySelector('article')
+        .classList.add('animate-fade-down');
+    }
+  });
+
+  observer.observe(containerPrincipal);
+</script>

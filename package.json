@@ -27,7 +27,8 @@
   },
   "devDependencies": {
     "eslint-config-prettier": "^9.0.0",
-    "standard": "^17.1.0"
+    "standard": "^17.1.0",
+    "tailwindcss-animated": "^1.0.1"
   },
   "eslintConfig": {
     "extends": "./node_modules/eslint-config-standard/index.js"

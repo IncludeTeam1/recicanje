@@ -6,9 +6,9 @@ export const GET = async ({ request }) => {
     la página no necesitara el limite
     */
   const query = request?.url.split('?')[1];
-  const limit = parseInt(query?.split('=')[1]);
-  const _id = query?.split('&')[1]?.split('=')[1];
-
+  const _id = query?.split('=')[1].split('&')[0];
+  const limit = query?.split('&')[1]?.split('=')[1];
+  console.log({ query, limit, _id });
   try {
     dbConnect();
 
@@ -40,7 +40,7 @@ export const GET = async ({ request }) => {
       _id: {
         $nin: [_id, ...idsEnviadas, ...idsRecibidas, ...idsConectados],
       },
-    }).limit(limit);
+    }).limit(parseInt(limit));
 
     // Devolver solo la información necesaria de los usuarios
     const usuariosSinId = usuariosDisponibles.map(

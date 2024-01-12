@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
 import { db } from '../../../firebase/client';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { getUsuarioDocument } from '../../../helpers/getUsuarioDocumento';
