@@ -149,7 +149,7 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
       >
         <GoogleIcon client:only className="py-1" />
       </button>
-      <button
+      {/*   <button
         onClick={() => {
           handleFacebook();
         }}
@@ -159,7 +159,7 @@ function BotonesAuth({ urlFetch, action, idBtnGoogle, idBtnFacebook }) {
         className="flex-grow flex justify-center rounded bg-blue-700"
       >
         <FacebookIcon client:only className="py-1" />
-      </button>
+      </button> */}
     </div>
   );
 }

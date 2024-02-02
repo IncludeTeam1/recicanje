@@ -3,6 +3,7 @@ import imgFeed from '@/assets/screnshots/recicanje_2.png';
 import imgContacts from '@/assets/screnshots/recicanje_3.png';
 import imgChat from '@/assets/screnshots/recicanje_4.png';
 import imgProfile from '@/assets/screnshots/recicanje_5.png';
+
 export const detailService = {
   login: {
     img: imgLogin,

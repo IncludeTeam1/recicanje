@@ -23,7 +23,7 @@ import { UsersIcon } from '@/icons/UsersIcon';
 import { PhotoIcon } from '@/icons/PhotoIcon';
 import { BASE_URL_API } from '@/config';
 
-import DetailsService from '@/componentes/DetailsService.astro';
+import DetailsService from '../components/DetailsService.astro';
 ---
 
 <!-- JS del servidor --><!-- HTML --><!doctype html>
@@ -165,7 +165,7 @@ import DetailsService from '@/componentes/DetailsService.astro';
       </section>
 
       <!-- Sección de los detalles de cada servicio -->
-      <DetailsService client:visible />
+      <DetailsService  />
 
       <!-- Sección de contacto -->
       <h2

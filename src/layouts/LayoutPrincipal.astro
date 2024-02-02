@@ -5,14 +5,13 @@ interface Props {
 }
 
 const { title, classNameLayout } = Astro.props;
-import { ViewTransitions } from 'astro:transitions';
 
 import { app } from '../firebase/server';
 import { getAuth } from 'firebase-admin/auth';
 
 /* Componentes */
 import { Header } from '../components/react/Header';
-import { BurbujaMensajes } from '../components/react/mensajes/BurbujaMensajes';
+
 import { BASE_URL_API, NOMBRE_APP } from '../config';
 import { Toaster } from 'sonner';
 

@@ -118,9 +118,11 @@ import { Header } from '../components/react/Header';
       }
     </style>
     <script>
+      import { BASE_URL_API } from '../config';
+
       const btnBack = document.querySelector('#btn-back');
       btnBack.addEventListener('click', (e) => {
-        window.location.replace('/feed');
+        window.location.replace(`${BASE_URL_API}/mensajes`);
       });
     </script>
   </body>
